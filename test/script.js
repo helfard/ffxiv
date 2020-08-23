@@ -1,7 +1,6 @@
-const address = new Vue({
-    // ページのセットアップ
+const test = new Vue({
     el: '#test',
     data: {
-        test: 'TEST'
+        message: 'TEST'
     }
   });
