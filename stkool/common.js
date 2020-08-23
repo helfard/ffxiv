@@ -15,7 +15,7 @@ const address = new Vue({
   data: INFO,
   mounted: function() {
     document.title = INFO.title; // タイトルをセット
-    document.getElementById('title').textContent = INFO.title;
+    document.getElementById('title').innerHTML = INFO.title;
   }
 });
 
