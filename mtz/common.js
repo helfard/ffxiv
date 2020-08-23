@@ -2,11 +2,11 @@
 
 const INFO = {
   // 各種情報
-  name: 'Submarine Tkool',
-  ver: '5.30823',
-  title: '潜水艦ツクール',
+  name: 'Submarine Mitzmorl',
+  ver: '0.530823',
+  title: '潜水艦ミッツモール',
   auther: 'Omochi Kinako (Chocobo)',
-  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/'
+  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4384735/'
 }
 
 const address = new Vue({

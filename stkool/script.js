@@ -31,11 +31,11 @@ const panel = new Vue({
     rankMax: 75
   },
   methods: {
-    checkAll: function() {
+    checkAll: function () {
       const MAX = this.bui.length * this.kyu.length;
       this.checkedButtons = this.checkedButtons.length === MAX ? [] : [...Array(MAX).keys()];
     },
-    checkLine: function(line) {
+    checkLine: function (line) {
       const NUM = this.bui.length,
         START = line * NUM,
         END = (line + 1) * NUM;
@@ -44,7 +44,7 @@ const panel = new Vue({
         if (!this.checkedButtons.includes(i)) ary.push(i);
       this.checkedButtons = ary.length ? this.checkedButtons.concat(ary).sort((a, b) => a - b) : this.checkedButtons.filter(i => i < START || END <= i);
     },
-    checkAny: function(orders) {
+    checkAny: function (orders) {
       const ORDERS = orders;
       let ary = [];
       for (let i of ORDERS)
@@ -52,7 +52,7 @@ const panel = new Vue({
       this.checkedButtons = ary.length ? this.checkedButtons.concat(ary).sort((a, b) => a - b) : this.checkedButtons.filter(i => !ORDERS.includes(i));
     }
   },
-  mounted: function() {
+  mounted: function () {
     this.checkedButtons = DEF_PANEL;
     this.rank = DEF_RANK;
     // ローカルストレージからデータを所得
@@ -71,7 +71,7 @@ const panel = new Vue({
     log(' Panel: ' + code);
     log(' Rank: ' + rank);
   },
-  updated: function() {
+  updated: function () {
     let ary = this.checkedButtons.slice();
     log('=================');
     log('Panels:');
@@ -104,16 +104,16 @@ const filter = new Vue({
     comment: 'ここに説明が出ます。'
   },
   methods: {
-    clearAll: function() {
+    clearAll: function () {
       this.atai = [...this.para].fill(null);
       this.comment = 'ここに説明が出ます。';
     },
-    setTmp: function(n, m) {
+    setTmp: function (n, m) {
       this.atai = this.tmp[n][m].para.slice();
       this.comment = this.tmp[n][m].comment;
     }
   },
-  mounted: function() {
+  mounted: function () {
     // サーチ情報がある場合はフィルタ情報をローカルストレージに保存して再読み込み
     const search = location.search.substr(1);
     if (search) {
@@ -133,7 +133,7 @@ const filter = new Vue({
       }
     }
   },
-  updated: function() {
+  updated: function () {
     let atai = this.atai.slice();
     for (let a in atai) {
       if (atai[a] !== null && atai[a] !== 0) {
@@ -178,16 +178,16 @@ const result = new Vue({
     sortKeys: SORT_KEYS // ソート用キーリスト
   },
   methods: {
-    setParts: function(parts, rank) {
+    setParts: function (parts, rank) {
       this.parts = parts;
       this.rank = rank;
       this.buildShips();
     },
-    setFilters: function(filters) {
+    setFilters: function (filters) {
       this.filters = filters;
       this.buildShips();
     },
-    buildShips: function() {
+    buildShips: function () {
       const B = this.bui.length;
       const KYU = this.kyu,
         PARA = this.para,
@@ -238,21 +238,21 @@ const result = new Vue({
       this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id));
       log('FilteredShips: ' + filteredShips.length);
     },
-    markShip: function(key) {
+    markShip: function (key) {
       this.markedShips.includes(key) ? this.markedShips.splice(this.markedShips.indexOf(key), 1) : this.markedShips.push(key);
       this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id)) ? true : false;
     },
-    sortTable: function(key) {
+    sortTable: function (key) {
       const KEY = this.sortKeys[key].key,
         R = this.sortKeys[key].reverse ? 1 : -1;
       if (this.bui.length <= key && key < this.bui.length + this.para.length) {
-        this.ships.sort(function(a, b) {
+        this.ships.sort(function (a, b) {
           if (a.para[KEY] < b.para[KEY]) return R;
           if (a.para[KEY] > b.para[KEY]) return R * -1;
           return 0;
         });
       } else {
-        this.ships.sort(function(a, b) {
+        this.ships.sort(function (a, b) {
           if (a[KEY] < b[KEY]) return R; // クラス順
           if (a[KEY] > b[KEY]) return R * -1; // クラス順
           // if (KYU[a[KEY]] < KYU[b[KEY]]) return R; // 名前順
@@ -264,12 +264,12 @@ const result = new Vue({
       log('=================');
       log('SortKey: ' + KEY);
     },
-    forceShow: function() {
+    forceShow: function () {
       this.forceShowFlag = !this.forceShowFlag;
       log('=================');
       log('ForceShowFlag: ' + this.forceShowFlag);
     },
-    copyShips: function() {
+    copyShips: function () {
       const SHIPS = this.ships,
         IDS = this.markedShips;
       let copyShips = []; // コピペするデータ
@@ -289,7 +289,7 @@ const result = new Vue({
       log(txt);
     }
   },
-  updated: function() {
+  updated: function () {
     log('=================');
     log('MarkedShips:');
     log(this.markedShips);

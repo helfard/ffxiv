@@ -2,11 +2,11 @@
 
 const INFO = {
   // 各種情報
-  name: 'Submarine Tkool',
-  ver: '5.30823',
-  title: '潜水艦ツクール',
+  name: 'Wandering Helper',
+  ver: '5.250823',
+  title: 'はいかいヘルパー',
   auther: 'Omochi Kinako (Chocobo)',
-  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/'
+  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4368206/'
 }
 
 const address = new Vue({

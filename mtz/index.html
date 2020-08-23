@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../vue.min.js"></script>
+</head>
+
+<body>
+    <header class="hero is-success is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title" id="title"></h1>
+            </div>
+        </div>
+    </header>
+    <section class="section">
+        <div class="container">
+            <div class="columns">
+                <div class="column is-narrow" style="width: 550px;">
+                    <div class="box content" id="panel">
+                        <h2 class="subtitle">パーツ</h2>
+                        <table class="table is-hoverable">
+                            <thead>
+                                <tr>
+                                    <th class="has-text-centered">
+                                        <a @click="checkAll()">級</a>
+                                    </th>
+                                    <th class="has-text-centered" v-for="(b, i) in bui">
+                                        {{ b }}
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="(k, i) in kyu">
+                                    <th class="has-text-centered">
+                                        <a class="button" @click="checkLine(i)">{{ k }}</a>
+                                    </th>
+                                    <td v-for="(b, j) in bui" class="has-text-centered">
+                                        <button class="button" @click="check(i * 4 + j)">
+                                            {{ formData[i * 4 + j] }}
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <th class="has-text-centered">
+                                        <a @click="checkAll()">級</a>
+                                    </th>
+                                    <th class="has-text-centered" v-for="b in bui">{{ b }}</th>
+                                </tr>
+                            </tfoot>
+                        </table>
+                    </div>
+                </div>
+                <div class="column is-narrow" style="width: 400px;">
+                    <div class="box content" id="sozai" v-show="firstSozai.length">
+                        <h2 class="subtitle">素材一覧</h2>
+                        <p v-if="lastSozai.length < 5">
+                            {{ lastSozai.join('・')
+                }}を作るために必要な素材は以下の通りです。
+                        </p>
+                        <p v-else>
+                            {{ lastSozai[0] }}・{{ lastSozai[1] }}・{{ lastSozai[2] }}・{{
+                lastSozai[3] }}ほかを作るために必要な素材は以下の通りです。
+                        </p>
+                        <div class="field control">
+                            <label class="radio"><input type="radio" name="sort" @click="sortKeys(0)"
+                                    checked="chedked" />適当順</label>
+                            <label class="radio"><input type="radio" name="sort"
+                                    @click="sortKeys(1)" />個数順</label><br />
+                            <a @click="copyTxt()" class="">リストをコピーする。</a>
+                            <ul style="overflow: auto; height: 450px;">
+                                <li v-for="sozai in firstSozai">
+                                    {{ sozai }} が {{ midSozai[midSozai.length - 1][sozai]}}個
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="box content" style="width: 650px;" id="checker" v-show="Object.keys(listSozai).length">
+                <h2 class="subtitle">収集チェッカー</h2>
+                <p>
+                    素材の個数を入力することで中間素材も含めた過不足を計算します。<br />（素材名か必要数をクリックすると十分数を入力したことにできます）
+                </p>
+                <div class="field control">
+                    <label class="radio"><input type="radio" v-model.number="showMode" value="2" />一次素材のみ</label>
+                    <label class="radio"><input type="radio" v-model.number="showMode"
+                            value="1" />直接入手手段がある一次素材と中間素材</label>
+                    <label class="radio"><input type="radio" v-model.number="showMode" value="0" />あらゆる素材</label>
+                </div>
+                <table class="table is-hoverable field">
+                    <thead>
+                        <tr>
+                            <th class="has-text-centered">
+                                <a @click="sortKeys(0)">素材名</a>
+                            </th>
+                            <th class="has-text-centered">所持数</th>
+                            <th class="has-text-centered">（実質数）</th>
+                            <th class="has-text-centered">
+                                <a @click="sortKeys(1)">必要数</a>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody class="">
+                        <tr v-for="(key, i) in keysSozai" v-show="
+            (showMode === 0)||
+            (showMode === 1 && howto[key])||
+            (showMode === 2 && sozai.firstSozai.includes(key))
+            ">
+                            <td>
+                                <a @click="fillForm(key)">{{ key }}</a>
+                                <span v-show="howto[key]">（<a @click="showHowTo(key)">入手法</a>）</span>
+                            </td>
+                            <td>
+                                <input size="4" v-model.number="listSozai[key].formValue" @input="checkZaiko()"
+                                    class="has-text-right" />
+                            </td>
+                            <td class="has-text-right">
+                                <span v-show="listSozai[key].flag" class="checked"></span>
+                                <span v-show="!listSozai[key].flag">（{{ listSozai[key].realValue }}）</span>
+                            </td>
+                            <td class="has-text-right">
+                                <a @click="fillForm(key)">{{ listSozai[key].required }}</a>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot></tfoot>
+                </table>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <address v-once class="content has-text-centered" id="address">
+                <strong>{{ name }}</strong> Ver.{{ ver }} by
+                <a :href="url">{{ auther }}</a>
+            </address>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="materials.js"></script>
+    <script src="howto.js"></script>
+    <script src="common.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
