@@ -1,6 +1,6 @@
-const test = new Vue({
-    el: '#test',
+var app = new Vue({
+    el: '#app',
     data: {
-        message: 'TEST'
+      message: 'Hello Vue!'
     }
-  });
+  })
