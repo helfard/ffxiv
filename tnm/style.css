@@ -1,0 +1,56 @@
+input[type=checkbox] {
+  display: none;
+}
+
+.radius {
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  text-align: center;
+}
+
+.radius-small {
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+  text-align: center;
+}
+
+input[type=checkbox]:checked+label {
+  font-weight: bold;
+  color: #f00;
+}
+
+input[type=range].slider {
+  width: 450px;
+  height: 12px;
+}
+
+@media screen and (max-width: 380px) {
+  header, footer {
+    width: 768px;
+  }
+}
+
+body {
+  animation: fadeIn 2s ease 0s 1 normal;
+  -webkit-animation: fadeIn 2s ease 0s 1 normal;
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+}
+
+@-webkit-keyframes fadeIn {
+  0% {
+    opacity: 0
+  }
+  100% {
+    opacity: 1
+  }
+}

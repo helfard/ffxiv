@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="../bulma.min.css">
+    <link rel="stylesheet" href="style.css">
+    <script src="../vue.min.js"></script>
+</head>
+
+<body>
+    <header class="hero is-info is-bold">
+        <div class="hero-body">
+            <div class="container">
+                <h1 class="title" id="title"></h1>
+            </div>
+        </div>
+    </header>
+    <section class="section">
+        <div class="container">
+            <div class="columns is-desktop">
+                <div class="column is-narrow" style="width: 620px;">
+                    <div class="box content" id="map">
+                        <h2 class="subtitle">目的地</h2>
+                        <div class="columns is-mobile">
+                            <div class="column is-narrow"
+                                style="width: 240px; height: 400px; overflow-y: scroll; direction: rtl;">
+                                <ol type="A" class="content" style="font-size: 14px; margin-left:15px; direction: ltr;">
+                                    <li v-for="(a, i) in AREA">
+                                        <input type="checkbox" v-model="checkedButtons" :value="i" @click="check(i);"
+                                            :id="'l' + i">
+                                        <label :for="'l' + i">{{ a.name }}</label>
+                                    </li>
+                                </ol>
+                            </div>
+                            <div class="column">
+                                <div class="box" style="position: relative; width: 300px; height: 300px;">
+                                    <div v-for="(a, i) in AREA" class=""
+                                        :style="{ position: 'absolute', top: a.y + 'px', left: a.x + 'px' }">
+                                        <input type="checkbox" v-model="checkedButtons" :value="i" @click="check(i);"
+                                            :id="'m' + i">
+                                        <label :for="'m' + i" class="button radius">{{ a.id }}</label>
+                                    </div>
+                                </div>
+                                <div class="button is-warning" @click="clearAll()">リセット</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="box content" id="submarine" style="">
+                        <h2 class="subtitle">潜水艦</h2>
+                        <label class="label">巡航速度 <input type="range" v-model="speed" :min="speedMin" :max="speedMax"
+                                step="5" class="slider">
+                            {{ speed }}
+                        </label>
+                    </div>
+                </div>
+                <div class="column is-narrow" style="width: 450px;">
+                    <div class="box content" id="lookup">
+                        <h2 class="subtitle">逆引き</h2>
+                        <dl style="height: 520px; overflow-y: scroll;">
+                            <div v-for="(a, i) in orders">
+                                <dt>
+                                    <input type="checkbox" v-model="checkedItems" :value="o_i[i]" :id="'r' + o_i[i]">
+                                    <label :for="'r' + o_i[i]" class="button is-text" @click="markItems(o_i[i]);">
+                                        {{ a }}
+                                        <span v-show="tansas[o_i[i]]"> （探査{{ tansas[o_i[i]] }} 運{{ lucks[o_i[i]] }}）
+                                        </span>
+                                    </label>
+                                </dt>
+                                <dd>
+                                    <span v-for="(b, j) in dictionary[o_i[i]]">
+                                        <input type="checkbox" v-model="map.checkedButtons" :value="b.no"
+                                            @click="map.check(b.no);" :id="j + '_' + i">
+                                        <label :for="j + '_' + i" class="button radius-small">
+                                            {{ b.id }}
+                                        </label>
+                                    </span>
+                                </dd>
+                            </div>
+                        </dl>
+                    </div>
+                </div>
+            </div>
+            <div class="box content" style="width: 600px;" id="result">
+                <h2 class="subtitle">航路情報</h2>
+                <p v-if="kyori"> 　最短の航路は <b>拠点 <span v-for="r in route"> → {{ area[r].id }}</span></b> です。<br>
+                    　踏破に必要な航続距離は<b>{{ kyori }}</b>です。<br> 　巡航速度<b>{{ speed }}</b>の場合、<b>{{ jikan }}</b>ほどかかります。<br>
+                    （検証手法の限界から数分程度の誤差があり得ます）<br>
+                    <span
+                        v-show="tansa">　満足な結果を得るには探査性能<b>{{ tansa }}</b>・運<b>{{ luck }}</b>が必要です。<br>（一部のデータは正確でない可能性があります）<br></span><br>
+                    ⇛ <a :href="tkoolUrl + '?' + tkoolCode" target="_blank">パラメータを潜水艦ツクールのフィルタにセットする。</a>
+                </p>
+                <p v-else>　ここに航路情報が出ます。</p>
+            </div>
+        </div>
+    </section>
+    <footer class="footer">
+        <div class="container">
+            <address v-once class="content has-text-centered" id="address">
+                <strong>{{ name }}</strong> Ver.{{ ver }} by <a :href="url">{{ auther }}</a>
+            </address>
+        </div>
+    </footer>
+
+    <script src="data.js"></script>
+    <script src="common.js"></script>
+    <script src="script.js"></script>
+
+</body>
+
+</html>
