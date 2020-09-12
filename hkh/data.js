@@ -345,6 +345,7 @@ const AREA = [
         smove: [],
         x: ,
         y: ,
+        kyori: ,
         research: ,
         distance: [],
         drop: [
@@ -360,7 +361,9 @@ const AREA = [
         sink: ,
         smove: [],
         x: ,
-        y: ,research: ,
+        y: ,
+        kyori: ,
+        research: ,
         distance: [],
         drop: [
       { name: '', tansa: },
@@ -376,6 +379,7 @@ const AREA = [
         smove: [],
         x: ,
         y: ,
+        kyori: ,
         research: ,
         distance: [],
         drop: [
@@ -392,6 +396,7 @@ const AREA = [
         smove: [],
         x: ,
         y: ,
+        kyori: ,
         research: ,
         distance: [],
         drop: [
@@ -408,6 +413,7 @@ const AREA = [
         smove: [],
         x: ,
         y: ,
+        kyori: ,
         research: ,
         distance: [],
         drop: [
@@ -424,6 +430,7 @@ const AREA = [
         smove: [],
         x: ,
         y: ,
+        kyori: ,
         research: ,
         distance: [],
         drop: [
