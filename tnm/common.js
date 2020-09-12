@@ -3,10 +3,10 @@
 const INFO = {
   // 各種情報
   name: 'Tuna Maker',
-  ver: '5.250823',
+  ver: '5.250912',
   title: 'ツナメイカー',
   auther: 'Omochi Kinako (Chocobo)',
-  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4368206/'
+  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4539408/'
 }
 
 const address = new Vue({
