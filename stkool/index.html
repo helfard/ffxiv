@@ -13,26 +13,36 @@
     <header class="hero is-primary is-bold">
         <div class="hero-body">
             <div class="container">
-                <h1 class="title" id="title"></h1>
+                <h1 class="title" id="title">{{ words['title'][sharedState.lang] }}</h1>
             </div>
         </div>
     </header>
+
+    <section id="lang">
+        <select v-model="lang">
+            <option v-for="lang in langs" :value="lang.id">{{ lang.name }}</option>
+        </select>
+    </section>
+
     <section class="section">
         <div class="container">
             <div class="columns is-desktop">
                 <div class="column is-narrow" style="width: 500px;">
                     <div class="box content" id="panel">
-                        <h2 class="subtitle">パーツ</h2>
+                        <h2 class="subtitle">{{ words['preferences'][sharedState.lang] }}</h2>
                         <table class="table is-hoverable">
                             <thead>
                                 <tr>
-                                    <th class="has-text-centered"><a @click="checkAll()">級</a></th>
-                                    <th class="has-text-centered" v-for="(b, i) in bui">{{ b }}</th>
+                                    <th class="has-text-centered"><a
+                                            @click="checkAll()">{{ words['class'][sharedState.lang] }}</a></th>
+                                    <th class="has-text-centered" v-for="(b, i) in bui">{{ words[b][sharedState.lang] }}
+                                    </th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="(k, i) in kyu">
-                                    <th class="has-text-centered"><a @click="checkLine(i)">{{ k }}</a></th>
+                                    <th class="has-text-centered"><a
+                                            @click="checkLine(i)">{{ words[k][sharedState.lang] }}</a></th>
                                     <td v-for="(b, j) in bui" class="has-text-centered">
                                         <input type="checkbox" v-model="checkedButtons" :value="i * 4 + j"
                                             :id="'p' + (i * 4 + j)">
@@ -42,34 +52,36 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="has-text-centered"><a @click="checkAll()">級</a></th>
-                                    <th class="has-text-centered" v-for="b in bui">{{ b }}</th>
+                                    <th class="has-text-centered"><a
+                                            @click="checkAll()">{{ words['class'][sharedState.lang] }}</a></th>
+                                    <th class="has-text-centered" v-for="b in bui">{{ words[b][sharedState.lang] }}</th>
                                 </tr>
                             </tfoot>
                         </table>
                         <div class="buttons is-centered">
-                            <a class="button" @click="checkAll()">全て</a>
+                            <a class="button" @click="checkAll()">{{ words['all'][sharedState.lang] }}</a>
                             <a class="button"
-                                @click="checkAny(Array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19))">旧パーツ全て</a>
+                                @click="checkAny(Array(0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19))">{{ WORDS['normal'][sharedState.lang] }}</a>
                             <a class="button"
-                                @click="checkAny(Array(20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39))">改級パーツ全て</a>
+                                @click="checkAny(Array(20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39))">{{ WORDS['modified'][sharedState.lang] }}</a>
                         </div>
                         <div>
-                            <label class="label">ランク <input type="range" v-model="rank" :min="rankMin" :max="rankMax"
-                                    class="slider">
+                            <label class="label">{{ words['rank'][sharedState.lang] }} <input type="range"
+                                    v-model="rank" :min="rankMin" :max="rankMax" class="slider">
                                 {{ rank }}
                             </label>
                         </div>
                     </div>
                 </div>
+
                 <div class="column is-narrow" style="width: 500px;">
                     <div class="box content field" id="filter">
-                        <h2 class="subtitle">フィルタ</h2>
+                        <h2 class="subtitle">{{ words['filter'][sharedState.lang] }}</h2>
                         <div class="columns is-mobile">
                             <div class="column is-narrow" style="width: 180px;">
                                 <div v-for="(p, i) in para">
                                     <div class="field">
-                                        <label class="label">{{ p }}
+                                        <label class="label">{{ words[p][sharedState.lang] }}
                                             <div class="control">
                                                 <input type="input" v-model.number="atai[i]" class="input">
                                             </div>
@@ -80,50 +92,51 @@
                             <div class="column">
                                 <div class="field">
                                     <div class="control">
-                                        <label class="label">初期化</label>
-                                        <a @click="clearAll()" class="button is-warning">リセット</a>
-                                    </div>
-                                </div>
-                                <label class="label">プリセット</label>
-                                <div v-for="(family, n) in tmp">
-                                    <div class="field">
-                                        <div class="control">
-                                            <span v-for="(set, m) in family">
-                                                <span v-if="m">.</span>
-                                                <a @click="setTmp(n, m)"
-                                                    class="button is-text is-paddingless">{{ set.name }}</a>
-                                            </span>
+                                        <label class="label">{{ words['preset'][sharedState.lang] }}</label>
+                                        <a @click="clearAll()"
+                                            class="button is-warning">{{ words['reset'][sharedState.lang] }}</a>
+                                        <div v-for="(family, n) in tmp">
+                                            <div class="field">
+                                                <div class="control">
+                                                    <span v-for="(set, m) in family">
+                                                        <span v-if="m">.</span>
+                                                        <a @click="setTmp(n, m)"
+                                                            class="button is-text is-paddingless">{{ WORDS[set.name][sharedState.lang] }}</a>
+                                                    </span>
+                                                </div>
+                                            </div>
                                         </div>
+                                        <label class="label">{{ words['comment'][sharedState.lang] }}</label>
+                                        <p v-html="words[comment][sharedState.lang]"></p>
                                     </div>
                                 </div>
-                                <label class="label">プリセット説明</label>
-                                <div>{{ comment }}</div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+
             <div class="box content" style="width: 650px;" id="result">
-                <h2 class="subtitle">リスト</h2>
+                <h2 class="subtitle">{{ words['list'][sharedState.lang] }}</h2>
                 <p v-if="ships.length" id="clipboard">
-                    {{ ships.length }}パターンありました。 <a v-show="copyFlag && !(!forceShowFlag && ships.length > maxShips)"
-                        @click="copyShips()">チェックしたデータをコピーする。</a>
-                    <a v-show="forceShowFlag && ships.length > maxShips" @click="forceShow()">縮小表示に戻す。</a>
+                    {{ ships.length }} {{ words['found'][sharedState.lang] }} <a
+                        v-show="copyFlag && !(!forceShowFlag && ships.length > maxShips)"
+                        @click="copyShips()">{{ words['copy'][sharedState.lang] }}</a>
+                    <a v-show="forceShowFlag && ships.length > maxShips"
+                        @click="forceShow()">{{ words['hide'][sharedState.lang] }}</a>
                 </p>
-                <p v-else> 条件を満たす組み合わせが存在しません。 </p>
-                <p v-if="!forceShowFlag && ships.length > maxShips"> 組み合わせが多すぎて表示できません。 <a
-                        @click="forceShow()">無理矢理表示する！（重い）</a>
+                <p v-else>{{ words['nomatch'][sharedState.lang] }}</p>
+                <p v-if="!forceShowFlag && ships.length > maxShips">{{ words['too many'][sharedState.lang] }} <a
+                        @click="forceShow()">{{ words['show all'][sharedState.lang] }}</a>
                 </p>
                 <table v-else v-show="ships.length" class="table is-narrow is-hoverable">
                     <thead>
                         <tr>
                             <th></th>
-                            <th v-for="(b, i) in bui" class="has-text-centered"><a @click="sortTable(i)">{{ b }}</a>
-                            </th>
+                            <th v-for="(b, i) in bui" class="has-text-centered"><a
+                                    @click="sortTable(i)">{{ words[b][sharedState.lang] }}</a></th>
                             <th v-for="(p, j) in para" class="has-text-centered"><a
-                                    @click="sortTable(j + bui.length)">{{ p }}</a></th>
-                            <th class="has-text-centered"><a @click="sortTable(bui.length + para.length)">{{ sum }}</a>
-                            </th>
+                                    @click="sortTable(j + bui.length)">{{ words[p][sharedState.lang] }}</a></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -132,39 +145,39 @@
                                 <input type="checkbox" v-model="markedShips" :value="ship.id">
                                 <label class="checkbox"></label>
                             </td>
-                            <td class="has-text-centered">{{ kyu[ship.body] }}</td>
-                            <td class="has-text-centered">{{ kyu[ship.tail] }}</td>
-                            <td class="has-text-centered">{{ kyu[ship.head] }}</td>
-                            <td class="has-text-centered">{{ kyu[ship.bridge] }}</td>
+                            <td class="has-text-centered">{{ words[kyu[ship.body]][sharedState.lang] }}</td>
+                            <td class="has-text-centered">{{ words[kyu[ship.tail]][sharedState.lang] }}</td>
+                            <td class="has-text-centered">{{ words[kyu[ship.head]][sharedState.lang] }}</td>
+                            <td class="has-text-centered">{{ words[kyu[ship.bridge]][sharedState.lang] }}</td>
                             <td v-for="p in ship.para" class="has-text-right">{{ p }}</td>
-                            <td class="has-text-right">{{ ship.sum }}</td>
                         </tr>
                     </tbody>
                     <tfoot>
                         <tr>
                             <th class="has-text-right"></th>
-                            <th v-for="(b, i) in bui" class="has-text-centered"><a @click="sortTable(i)">{{ b }}</a>
-                            </th>
+                            <th v-for="(b, i) in bui" class="has-text-centered"><a
+                                    @click="sortTable(i)">{{ words[b][sharedState.lang] }}</a></th>
                             <th v-for="(p, j) in para" class="has-text-centered"><a
-                                    @click="sortTable(j + bui.length)">{{ p }}</a></th>
-                            <th class="has-text-centered"><a @click="sortTable(bui.length + para.length)">{{ sum }}</a>
-                            </th>
+                                    @click="sortTable(j + bui.length)">{{ words[p][sharedState.lang] }}</a></th>
                         </tr>
                     </tfoot>
                 </table>
             </div>
         </div>
     </section>
+
     <footer class="footer">
         <div class="container">
             <address v-once class="content has-text-centered" id="address">
-                <strong>{{ name }}</strong> Ver.{{ ver }} by <a :href="url">{{ auther }}</a>
+                <strong>{{ sharedState.name }}</strong> Ver.{{ sharedState.ver }} by <a
+                    :href="sharedState.url">{{ sharedState.auther }}</a>
             </address>
         </div>
     </footer>
 
-    <script src="data.js"></script>
+    <script src="words.js"></script>
     <script src="common.js"></script>
+    <script src="data.js"></script>
     <script src="script.js"></script>
 
 </body>

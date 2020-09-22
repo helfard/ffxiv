@@ -1,3 +1,9 @@
+#lang {
+    position: absolute;
+    top: 0px;
+    right: 0px;
+}
+
 input[type=radio] {
     display: none;
 }

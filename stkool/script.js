@@ -1,7 +1,3 @@
-'use strict';
-
-const DEBUG = false; // デバッグモード
-
 const DEF_RANK = 70; // デフォルトのランク
 const DEF_PANEL = [...Array(18).keys(), 18, 19]; // デフォルトパネル
 const MAX_SHIPS = 1000; // 組み合わせの最大表示件数
@@ -22,18 +18,23 @@ const panel = new Vue({
   // 入力パネル
   el: '#panel',
   data: {
+    words: WORDS, // 辞書データ
     bui: BUI,
     kyu: KYU,
     bonus: BONUS,
     checkedButtons: [], // チェックされたボタン
-    rank: 0,
+    rank: 50,
     rankMin: 50,
-    rankMax: 75
+    rankMax: 75,
+    sharedState: store.state, // 共用データ
   },
   methods: {
     checkAll: function () {
       const MAX = this.bui.length * this.kyu.length;
-      this.checkedButtons = this.checkedButtons.length === MAX ? [] : [...Array(MAX).keys()];
+      this.checkedButtons =
+        this.checkedButtons.length === MAX ? [] : [...Array(MAX).keys()];
+      log('Panel:');
+      log(' Checked All');
     },
     checkLine: function (line) {
       const NUM = this.bui.length,
@@ -42,92 +43,105 @@ const panel = new Vue({
       let ary = [];
       for (let i = START; i < END; i++)
         if (!this.checkedButtons.includes(i)) ary.push(i);
-      this.checkedButtons = ary.length ? this.checkedButtons.concat(ary).sort((a, b) => a - b) : this.checkedButtons.filter(i => i < START || END <= i);
+      this.checkedButtons = ary.length
+        ? this.checkedButtons.concat(ary).sort((a, b) => a - b)
+        : this.checkedButtons.filter(i => i < START || END <= i);
+      log('Panel:');
+      log(' Checked Line: ' + line);
     },
     checkAny: function (orders) {
-      const ORDERS = orders;
       let ary = [];
-      for (let i of ORDERS)
-        if (!this.checkedButtons.includes(i)) ary.push(i);
-      this.checkedButtons = ary.length ? this.checkedButtons.concat(ary).sort((a, b) => a - b) : this.checkedButtons.filter(i => !ORDERS.includes(i));
-    }
+      for (let i of orders) if (!this.checkedButtons.includes(i)) ary.push(i);
+      this.checkedButtons = ary.length
+        ? this.checkedButtons.concat(ary).sort((a, b) => a - b)
+        : this.checkedButtons.filter(i => !orders.includes(i));
+      log('Panel:');
+      log(' Checked Any: ' + orders);
+    },
   },
   mounted: function () {
     this.checkedButtons = DEF_PANEL;
     this.rank = DEF_RANK;
     // ローカルストレージからデータを所得
-    let code = localStorage.getItem('panel');
-    let rank = localStorage.getItem('rank');
+    const CODE = localStorage.getItem('panel'),
+      RANK = localStorage.getItem('rank');
     let ary = [],
       panels = [];
-    if (code) {
-      ary = Array.from(code);
+    if (CODE) {
+      ary = Array.from(CODE);
       ary.forEach((v, i) => { if (v | 0) panels.push(i); });
       this.checkedButtons = panels;
-      this.rank = rank;
+      this.rank = RANK;
     }
-    log('=================');
-    log('LocalStorage(Get):');
-    log(' Panel: ' + code);
-    log(' Rank: ' + rank);
+    log('Panel:');
+    log(' LocalStorage(Get):');
+    log('  Panel: ' + CODE);
+    log('  Rank: ' + RANK);
   },
   updated: function () {
-    let ary = this.checkedButtons.slice();
-    log('=================');
-    log('Panels:');
-    log(ary);
-    log('Rank: ' + this.rank);
-    result.setParts(ary, this.rank);
+    const ARY = this.checkedButtons.slice();
     // ローカルストレージにパーツデータを保存
     let code = '',
       rank = this.rank;
-    let max = this.bui.length * this.kyu.length;
-    for (let i = 0; i < max; i++) {
-      code += ary.includes(i) ? '1' : '0';
+    const MAX = this.bui.length * this.kyu.length;
+    for (let i = 0; i < MAX; i++) {
+      code += ARY.includes(i) ? '1' : '0';
     }
     localStorage.setItem('panel', code);
     localStorage.setItem('rank', rank);
-    log('=================');
-    log('LocalStorage(Set):');
-    log(' Panel: ' + code);
-    log(' Rank: ' + rank);
-  }
+    log('Panel:');
+    log(' LocalStorage(Set):');
+    log('  Panel: ' + code);
+    log('  Rank: ' + rank);
+    // 結果表示
+    log('Panel:');
+    log(' Checked: ' + ARY);
+    log(' Rank: ' + this.rank);
+    result.setParts(ARY, this.rank);
+
+  },
 });
 
 const filter = new Vue({
   // 性能フィルタ
   el: '#filter',
   data: {
+    words: WORDS, // 辞書データ
     para: PARA,
     atai: [...PARA].fill(null),
     tmp: DEKIAI,
-    comment: 'ここに説明が出ます。'
+    comment: 'default comment', // プリセットの説明（本文ではなくハッシュのキー）
+    sharedState: store.state, // 共用データ
   },
   methods: {
     clearAll: function () {
       this.atai = [...this.para].fill(null);
-      this.comment = 'ここに説明が出ます。';
+      this.comment = 'default comment';
+      log('Filter:');
+      log(' ClearAll');
     },
     setTmp: function (n, m) {
       this.atai = this.tmp[n][m].para.slice();
       this.comment = this.tmp[n][m].comment;
+      log('Filter:');
+      log(' SetTemplate: ' + this.words[this.tmp[n][m].name][this.sharedState.lang]);
     }
   },
   mounted: function () {
     // サーチ情報がある場合はフィルタ情報をローカルストレージに保存して再読み込み
-    const search = location.search.substr(1);
-    if (search) {
-      localStorage.setItem('filter', search);
-      location.replace(location.protocol + '//' + location.hostname + location.pathname); // 再読み込み
+    const SEARCH = location.search.substr(1);
+    if (SEARCH) {
+      const URL = location.protocol + '//' + location.hostname + location.pathname;
+      localStorage.setItem('filter', SEARCH);
+      location.replace(URL); // 再読み込み
     } else {
       // サーチ情報が無い場合はローカルストレージからフィルタ情報を読み込む
-      let code = localStorage.getItem('filter');
-      if (code) {
-        let params = ('000'.repeat(6) + parseInt(code, 36)).slice(-3 * 6).match(/.{3}/g).map(p => p - 0);
-        this.atai = params.map(p => p === 0 ? null : p);
-        log('=================');
-        log('LocalStorage(Get):');
-        log(' Filter: ' + code);
+      const CODE = localStorage.getItem('filter');
+      if (CODE) {
+        const PARAMS = ('000'.repeat(6) + parseInt(CODE, 36)).slice(-3 * 6).match(/.{3}/g).map(p => p - 0);
+        this.atai = PARAMS.map(p => p === 0 ? null : p);
+        log('Filter:');
+        log(' LocalStorage(Get):' + CODE);
         // 読み込んだらローカルストレージを削除
         localStorage.removeItem('filter');
       }
@@ -141,18 +155,18 @@ const filter = new Vue({
         if (atai[a] === 0) atai[a] = null;
       }
     }
-    log('=================');
-    log('Filters:');
-    log(atai);
+    log('Filter:');
+    log(' Filters: ' + atai);
+    // 結果表示
     result.setFilters(atai);
     /*
-    // ローカルストレージにフィルタ設定を保存
-    let params = atai.map(a => a === null ? 0 : a).slice();
-    let code = (params.map(p => ('000' + p).slice(-3)).join('') - 0).toString(36);
-    localStorage.setItem('filter', code);
-    log('=================');
-    log('LocalStorage(Set):');
-    log(' Filter: '+ code);
+        // ローカルストレージにフィルタ設定を保存
+        let params = atai.map(a => a === null ? 0 : a).slice();
+        let code = (params.map(p => ('000' + p).slice(-3)).join('') - 0).toString(36);
+        localStorage.setItem('filter', code);
+        log('=================');
+        log('LocalStorage(Set):');
+        log(' Filter: '+ code);
     */
   }
 });
@@ -161,6 +175,7 @@ const result = new Vue({
   // 結果一覧
   el: '#result',
   data: {
+    words: WORDS, // 辞書データ
     bui: BUI,
     kyu: KYU_S,
     bonus: BONUS,
@@ -175,7 +190,8 @@ const result = new Vue({
     forceShowFlag: false, // 最大表示件数を越えて強制的に表示するフラグ
     markedShips: [], // コピペ用チェックリスト
     copyFlag: false,
-    sortKeys: SORT_KEYS // ソート用キーリスト
+    sortKeys: SORT_KEYS, // ソート用キーリスト
+    sharedState: store.state, // 共用データ
   },
   methods: {
     setParts: function (parts, rank) {
@@ -220,8 +236,8 @@ const result = new Vue({
           }
         }
       }
-      log('=================');
-      log('Ships: ' + ships.length);
+      log('Result:');
+      log(' Ships: ' + ships.length);
       // フィルタリング
       const FILTERS = this.filters;
       let filteredShips = [];
@@ -236,7 +252,7 @@ const result = new Vue({
       }
       this.ships = filteredShips.length === ships.length ? ships : filteredShips;
       this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id));
-      log('FilteredShips: ' + filteredShips.length);
+      log(' FilteredShips: ' + filteredShips.length);
     },
     markShip: function (key) {
       this.markedShips.includes(key) ? this.markedShips.splice(this.markedShips.indexOf(key), 1) : this.markedShips.push(key);
@@ -261,13 +277,13 @@ const result = new Vue({
         });
       }
       this.sortKeys[key].reverse = !this.sortKeys[key].reverse;
-      log('=================');
-      log('SortKey: ' + KEY);
+      log('Result:');
+      log(' SortKey: ' + KEY);
     },
     forceShow: function () {
       this.forceShowFlag = !this.forceShowFlag;
-      log('=================');
-      log('ForceShowFlag: ' + this.forceShowFlag);
+      log('Result:');
+      log(' ForceShowFlag: ' + this.forceShowFlag);
     },
     copyShips: function () {
       const SHIPS = this.ships,
@@ -277,22 +293,21 @@ const result = new Vue({
       for (let ship of SHIPS)
         if (IDS.includes(ship.id)) copyShips.push(ship);
       for (let ship of copyShips) {
-        let txt = KYU_S[ship.body] + KYU_S[ship.tail] + KYU_S[ship.head] + KYU_S[ship.bridge] + '/';
+        let txt = this.words[KYU_S[ship.body]][this.sharedState.lang] + this.words[KYU_S[ship.tail]][this.sharedState.lang] + this.words[KYU_S[ship.head]][this.sharedState.lang] + this.words[KYU_S[ship.bridge]][this.sharedState.lang] + '/';
         for (let p in PARA_S)
-          if (p > 0) txt += PARA_S[p] + ('   ' + ship.para[p]).substr(-3);
+          if (p > 0) txt += this.words[PARA_S[p]][this.sharedState.lang] + ('   ' + ship.para[p]).substr(-3);
         copyLines.push(txt.trim());
       }
       let txt = copyLines.join('\n') + '\n';
-      if (execCopy(txt)) alert('コピーしました！');
-      log('=================');
-      log('Clipboard:');
+      if (execCopy(txt)) alert(this.words['copied'][this.sharedState.lang]);
+      log('Result:');
+      log(' Clipboard:');
       log(txt);
     }
   },
   updated: function () {
-    log('=================');
-    log('MarkedShips:');
-    log(this.markedShips);
+    log('Result:');
+    log(' MarkedShip:' + this.markedShips);
   }
 });
 

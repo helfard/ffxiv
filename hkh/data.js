@@ -213,7 +213,7 @@ const AREA = [
       { name: 'ココボロ材', tansa: 160 },
       { name: 'ピュアチタン鉱', tansa: 170 },
     ],
-    luck: 165,
+    luck: 175,
   }, {
     id: 'N',
     name: '穴あき靴下島',

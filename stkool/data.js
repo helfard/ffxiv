@@ -1,55 +1,53 @@
-'use strict';
-
 const KYU = [
   // 級の名前
-  'シャーク',
-  'ウンキウ',
-  'ホエール',
-  'シーラカンス',
-  'シルドラ',
-  'シャーク改',
-  'ウンキウ改',
-  'ホエール改',
-  'シーラカンス改',
-  'シルドラ改'
+  'shark', // シャーク
+  'unkiu', // ウンキウ
+  'whale', // ホエール
+  'coelacanth', // シーラカンス
+  'syldra', // シルドラ
+  'modified shark', // シャーク改
+  'modified unkiu', // ウンキウ改
+  'modified whale', // ホエール改
+  'modified coelacanth', // シーラカンス改
+  'modified syldra', // シルドラ改
 ];
 const KYU_S = [
   // 級の名前（短縮形）
-  'シャ',
-  'ウン',
-  'ホエ',
-  'シー',
-  'シル',
-  'ｼｬ改',
-  'ｳﾝ改',
-  'ﾎｴ改',
-  'ｼｰ改',
-  'ｼﾙ改'
+  'sha', // シャ
+  'un', // ウン
+  'wha', // ホエ
+  'coe', // シー
+  'syl', // シル
+  'm-sha', // ｼｬ改
+  'm-un', // ｳﾝ改
+  'm-wha', // ﾎｴ改
+  'm-coe', // ｼｰ改
+  'm-syl', // ｼﾙ改
 ];
 const BUI = [
   // 部位の名前
-  '艦体',
-  '艦尾',
-  '艦首',
-  '艦橋'
+  'hull', // 艦体
+  'stern', // 艦尾
+  'bow', // 艦首
+  'bridge', // 艦橋
 ];
 const PARA = [
   // パラメータの名前
-  'コスト',
-  '探査性能',
-  '収集性能',
-  '巡航速度',
-  '航続距離',
-  '運'
+  'cost', // コスト
+  'surveillance', // 探査性能
+  'retrieval', // 収集性能
+  'speed', // 巡航速度
+  'range', // 航続距離
+  'favor' // 運
 ];
 const PARA_S = [
   // パラメータの名前（短縮形）
-  'Cost',
-  '探査',
-  '収集',
-  '速度',
-  '距離',
-  '運'
+  'cst', // Cost
+  'srv', // 探査
+  'rtr', // 収集
+  'spd', // 速度
+  'rng', // 距離
+  'fvr' // 運
 ];
 const SUM = '合計値';
 const SUM_S = '計';
@@ -136,91 +134,128 @@ BONUS[73] = [0, 26, 33, 17, 22, 17];
 BONUS[74] = [0, 26, 35, 18, 23, 19];
 BONUS[75] = [0, 30, 40, 20, 23, 20];
 const DEKIAI = [
-  [{ // 定番構成（コスト, 探査性能, 収集性能, 巡航速度, 航続距離, 運）
-    name: 'ココボロ材',
-    para: [null, 150, null, null, 21, 140],
-    comment: '溺没海 A'
+  // 定番構成（コスト, 探査性能, 収集性能, 巡航速度, 航続距離, 運）
+  [{
+    name: 'kamacite ore', // カマサイト鉱石
+    para: [null, 120, null, null, 47, null],
+    comment: 'deepsea y'
   }, {
-    name: '真',
-    para: [null, 155, null, null, 38, 140],
-    comment: '溺没海 A→B'
+    name: 'ii',
+    para: [null, 130, null, null, 84, null],
+    comment: 'deepsea yv'
   }, {
-    name: '極',
-    para: [null, 165, null, null, 63, 145],
-    comment: '溺没海 B→A→D'
+    name: 'iii',
+    para: [null, 130, null, null, 84, 100],
+    comment: 'deepsea yv'
   }, {
-    name: '絶',
-    para: [null, 165, null, null, 88, 145],
-    comment: '溺没海 B→A→D→F'
+    name: 'iv',
+    para: [null, 130, null, null, 84, 105],
+    comment: 'deepsea yv'
+  }, {
+    name: 'v',
+    para: [null, 130, 140, null, 84, 105],
+    comment: 'deepsea yv'
+  }, {
+    name: 'vi',
+    para: [null, 130, 145, null, 84, 105],
+    comment: 'deepsea yv'
+  }, {
+    name: 'vii',
+    para: [null, 130, 190, null, 84, 105],
+    comment: 'deepsea yv'
   }], [{
-    name: 'ピュアチタン鉱石',
-    para: [null, 150, null, null, 21, 140],
-    comment: '溺没海 A'
+    name: 'cocobolo lumber', // ココボロ材
+    para: [null, 145, null, null, 38, null],
+    comment: 'ashsea ab'
   }, {
-    name: '真',
-    para: [null, 160, null, null, 40, 145],
-    comment: '溺没海 A→C'
+    name: 'ii',
+    para: [null, 150, null, null, 63, null],
+    comment: 'ashsea bad'
   }, {
-    name: '極',
-    para: [null, 170, null, null, 74, 145],
-    comment: '溺没海 A→C→I'
+    name: 'iii',
+    para: [null, 155, null, null, 88, null],
+    comment: 'ashsea badf'
+  }, {
+    name: 'iv',
+    para: [null, 155, null, null, 88, 145],
+    comment: 'ashsea badf'
+  }, {
+    name: 'v',
+    para: [null, 155, 180, null, 88, 145],
+    comment: 'ashsea badf'
+  }, {
+    name: 'vi',
+    para: [null, 155, 220, null, 88, 145],
+    comment: 'ashsea badf'
   }], [{
-    name: 'クリプトメリア原木',
-    para: [null, 155, null, null, 24, 140],
-    comment: '溺没海 B'
+    name: 'balsa wood scrap', // バルサ廃材
+    para: [null, 30, null, null, 38, null],
+    comment: 'deepsea gh'
   }, {
-    name: '真',
-    para: [null, 165, null, null, 50, 145],
-    comment: '溺没海 B→D'
+    name: 'ii',
+    para: [null, 35, null, null, 55, null],
+    comment: 'deepsea igh'
   }, {
-    name: '極',
-    para: [null, 170, null, null, 76, 145],
-    comment: '溺没海 B→D→I'
+    name: 'iii',
+    para: [null, 35, null, null, 55, 90],
+    comment: 'deepsea igh'
   }, {
-    name: '絶',
-    para: [null, 170, null, null, 109, 160],
-    comment: '溺没海 B→D→I→K'
+    name: 'iv',
+    para: [null, 35, 75, null, 55, 90],
+    comment: 'deepsea igh'
+  }, {
+    name: 'v',
+    para: [null, 35, 105, null, 55, 90],
+    comment: 'deepsea igh'
+  }], [{
+    name: 'pure titanium ore', // ピュアチタン鉱
+    para: [null, 155, null, null, 74, null],
+    comment: 'ashsea aci'
+  }, {
+    name: 'ii',
+    para: [null, 160, null, null, 103, null],
+    comment: 'ashsea acil'
+  }, {
+    name: 'iii',
+    para: [null, 170, null, null, 138, null],
+    comment: 'ashsea acmil'
+  }, {
+    name: 'iv',
+    para: [null, 170, null, null, 138, 175],
+    comment: 'ashsea acmil'
+  }, {
+    name: 'v',
+    para: [null, 170, 240, null, 138, 175],
+    comment: 'ashsea acmil'
+  }], [{
+    name: 'cryptomeria log',
+    para: [null, 155, null, null, 76, null],
+    comment: 'ashsea bdi'
+  }, {
+    name: 'ii',
+    para: [null, 155, null, null, 109, null],
+    comment: 'ashsea bdik'
+  }, {
+    name: 'iii',
+    para: [null, 155, null, null, 109, 160],
+    comment: 'ashsea bdik'
+  }, {
+    name: 'iv',
+    para: [null, 155, 190, null, 109, 160],
+    comment: 'ashsea bdik'
+  }, {
+    name: 'v',
+    para: [null, 155, 230, null, 109, 160],
+    comment: 'ashsea bdik'
     /*
       }], [{
-        name: 'アロハウソウソ',
-        para: [null, 165, null, null,  34, 145],
-        comment: 'G'
+        name: '',
+        para: [null, 0, null, null,  0, 0],
+        comment: ''
       }, {
-        name: '真',
-        para: [null, 165, null, null,  54, 145],
-        comment: 'G→F'
-      }], [{
-        name: 'コバンザメ級潜水艦',
-        para: [null, 160, null, null,  36, 150],
-        comment: 'E'
-      }, {
-        name: '真',
-        para: [null, 170, null, null,  39, 145],
-        comment: 'I'
-      }, {
-        name: '極',
-        para: [null, 170, null, null,  57, 150],
-        comment: 'E→I'
-      }, {
-        name: '絶',
-        para: [null, 170, null, null,  90, 160],
-        comment: 'E→I→K'
-      }], [{
-        name: 'ミーアキャット',
-        para: [null, 190, null, null,  40, 170],
-        comment: 'N（運は妥協しましょう）'
-      }], [{
-        name: '引き上げられた古銭',
-        para: [null, 175, null, null,  45, 150],
-        comment: 'H'
-      }, {
-        name: '真',
-        para: [null, 185, null, null,  34, 175],
-        comment: 'O（データ未確定）'
-      }, {
-        name: '極',
-        para: [null, 185, null, null,  70, 175],
-        comment: 'O→H（データ未確定）'
+        name: 'ii',
+        para: [null, 0, null, null,  0, 0],
+        comment: ''
     */
   }]
 ];
