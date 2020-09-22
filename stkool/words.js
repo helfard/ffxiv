@@ -237,7 +237,7 @@ const WORDS = {
     },
 
     'kamacite ore': {
-        'ja': 'カマサイト鉱石',
+        'ja': 'カマサイト鉱',
         'en': 'Kamacite Ore',
     },
     'cocobolo lumber': {
