@@ -8,7 +8,7 @@ const WORDS = {
     // 翻訳辞書
     'title': {
         'ja': '潜水艦ツクール',
-        'en': 'Submersible Tkool',
+        'en': 'Submersible Maker',
     },
 
     'class': {
