@@ -8,7 +8,7 @@ const log = msg => {
 const store = {
   // 共用データ
   state: {
-    name: 'Submersible Tkool',
+    name: 'Submersible Maker',
     ver: '5.30922',
     auther: 'Omochi Kinako (Chocobo)',
     url:
