@@ -36,7 +36,7 @@ const WORDS = {
     'modified': {
         'ja': '改級パーツ全て',
         'en': 'Modified',
-        'en': '改級部件全部',
+        'tc': '改級部件全部',
     },
 
     'rank': {
