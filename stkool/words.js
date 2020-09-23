@@ -6,6 +6,7 @@ const LANGS = [
 ];
 
 // 中文はChocobo鯖のRondo Grantさんに作ってもらいました。
+// EnglishはChocobo鯖のPaca Kumaさんに添削してもらいました。
 
 const WORDS = {
     // 翻訳辞書
@@ -63,7 +64,7 @@ const WORDS = {
     },
     'comment': {
         'ja': '説明',
-        'en': 'Comment',
+        'en': 'Description',
         'tc': '說明',
     },
     'default comment': {
@@ -104,7 +105,7 @@ const WORDS = {
     },
     'copy': {
         'ja': 'チェックしたデータをコピーする。',
-        'en': 'Copy chedked submersibles.',
+        'en': 'Copy checked submersibles.',
         'tc': '複製選取的資料。',
     },
     'copied': {
@@ -113,9 +114,30 @@ const WORDS = {
         'tc': '複製完成!',
     },
 
+    'hull': {
+        'ja': '艦体',
+        'en': 'Hull',
+        'tc': '船體'
+    },
+    'stern': {
+        'ja': '艦尾',
+        'en': 'Stern',
+        'tc': '船尾'
+    },
+    'bow': {
+        'ja': '艦首',
+        'en': 'Bow',
+        'tc': '船首'
+    },
+    'bridge': {
+        'ja': '艦橋',
+        'en': 'Bridge',
+        'tc': '艦橋'
+    },
+
     'cost': {
         'ja': 'パーツコスト',
-        'en': 'Compornents',
+        'en': 'Components',
         'tc': '配件重量',
     },
     'surveillance': {
@@ -143,6 +165,7 @@ const WORDS = {
         'en': 'Favor',
         'tc': '恩惠(運氣)',
     },
+
     'cst': {
         'ja': 'Cost',
         'en': 'Cost',
@@ -224,6 +247,7 @@ const WORDS = {
         'en': 'M-Syldra',
         'tc': '希爾德拉改',
     },
+
     'sha': {
         'ja': 'シャ',
         'en': 'S',
@@ -274,26 +298,6 @@ const WORDS = {
         'en': 'S+',
         'tc': '希改'
     },
-    'hull': {
-        'ja': '艦体',
-        'en': 'Hull',
-        'tc': '船體'
-    },
-    'stern': {
-        'ja': '艦尾',
-        'en': 'Stern',
-        'tc': '船尾'
-    },
-    'bow': {
-        'ja': '艦首',
-        'en': 'Bow',
-        'tc': '船首'
-    },
-    'bridge': {
-        'ja': '艦橋',
-        'en': 'Bridge',
-        'tc': '艦橋'
-    },
 
     'kamacite ore': {
         'ja': 'カマサイト鉱',
@@ -320,6 +324,7 @@ const WORDS = {
         'en': 'Cryptomeria Log',
         'tc': '柳杉原木',
     },
+
     'ii': {
         'ja': '真',
         'en': 'II',
@@ -363,17 +368,17 @@ const WORDS = {
     },
     'ashsea ab': {
         'ja': '灰海 A→B',
-        'en': 'Sea of ASh:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan',
+        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan',
         'tc': '灰海 A→B',
     },
     'ashsea bad': {
         'ja': '灰海 B→A→D',
-        'en': 'Sea of ASh:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1',
+        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1',
         'tc': '灰海 B→A→D',
     },
     'ashsea badf': {
         'ja': '灰海 B→A→D→F',
-        'en': 'Sea of ASh:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1<br> -&gt; Sea of Ash 2',
+        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1<br> -&gt; Sea of Ash 2',
         'tc': '灰海 B→A→D→F',
     },
     'deepsea gh': {
@@ -388,12 +393,12 @@ const WORDS = {
     },
     'ashsea aci': {
         'ja': '灰海 A→C→I',
-        'en': 'Sea of ASh:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench',
+        'en': 'Sea of Ash:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench',
         'tc': '灰海 A→C→I',
     },
     'ashsea acil': {
         'ja': '灰海 A→C→I→L',
-        'en': 'Sea of ASh:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench<br>-&gt; The Lone Glove',
+        'en': 'Sea of Ash:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench<br>-&gt; The Lone Glove',
         'tc': '灰海 A→C→I→L',
     },
     'ashsea acmil': {
