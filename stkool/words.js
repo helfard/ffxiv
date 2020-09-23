@@ -5,6 +5,8 @@ const LANGS = [
     { id: 'tc', name: '中文' },
 ];
 
+// 中文はChocobo鯖のRondo Grantさんに作ってもらいました。
+
 const WORDS = {
     // 翻訳辞書
     'title': {
