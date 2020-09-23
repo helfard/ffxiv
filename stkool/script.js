@@ -160,13 +160,13 @@ const filter = new Vue({
     // 結果表示
     result.setFilters(atai);
     /*
-        // ローカルストレージにフィルタ設定を保存
-        let params = atai.map(a => a === null ? 0 : a).slice();
-        let code = (params.map(p => ('000' + p).slice(-3)).join('') - 0).toString(36);
-        localStorage.setItem('filter', code);
-        log('=================');
-        log('LocalStorage(Set):');
-        log(' Filter: '+ code);
+    // ローカルストレージにフィルタ設定を保存
+    let params = atai.map(a => a === null ? 0 : a).slice();
+    let code = (params.map(p => ('000' + p).slice(-3)).join('') - 0).toString(36);
+    localStorage.setItem('filter', code);
+    log('=================');
+    log('LocalStorage(Set):');
+    log(' Filter: '+ code);
     */
   }
 });

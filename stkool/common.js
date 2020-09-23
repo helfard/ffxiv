@@ -9,7 +9,7 @@ const store = {
   // 共用データ
   state: {
     name: 'Submersible Maker',
-    ver: '5.30922',
+    ver: '5.30924',
     auther: 'Omochi Kinako (Chocobo)',
     url:
       'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
@@ -19,6 +19,7 @@ const store = {
     log('Store:');
     log(' SetLang: ' + lang);
     this.state.lang = lang;
+    document.documentElement.lang = lang;
   },
 };
 
