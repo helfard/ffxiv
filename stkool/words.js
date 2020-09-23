@@ -208,7 +208,7 @@ const WORDS = {
     'hull': {
         'ja': '艦体',
         'en': 'Hull',
-        'zh-TW': '船體'
+        'zh-TW': '船體',
         'zh-CH': '船体',
         'ko': '선체',
         'fr': '',
@@ -217,7 +217,7 @@ const WORDS = {
     'stern': {
         'ja': '艦尾',
         'en': 'Stern',
-        'zh-TW': '船尾'
+        'zh-TW': '船尾',
         'zh-CH': '船尾',
         'ko': '함미',
         'fr': '',
@@ -226,7 +226,7 @@ const WORDS = {
     'bow': {
         'ja': '艦首',
         'en': 'Bow',
-        'zh-TW': '船首'
+        'zh-TW': '船首',
         'zh-CH': '船首',
         'ko': '잠수함 목',
         'fr': '',
@@ -235,7 +235,7 @@ const WORDS = {
     'bridge': {
         'ja': '艦橋',
         'en': 'Bridge',
-        'zh-TW': '艦橋'
+        'zh-TW': '艦橋',
         'zh-CH': '舰桥',
         'ko': '함교',
         'fr': '',
@@ -246,8 +246,8 @@ const WORDS = {
         'ja': 'パーツコスト',
         'en': 'Components',
         'zh-TW': '配件重量',
-        'zh-CH': '구성품',
-        'ko': '',
+        'zh-CH': '配件重量',
+        'ko': '구성품',
         'fr': '',
         'de': '',
     },
@@ -482,7 +482,7 @@ const WORDS = {
     'syl': {
         'ja': 'シル',
         'en': 'S',
-        'zh-TW': '希'
+        'zh-TW': '希',
         'zh-CH': '希',
         'ko': 'S?',
         'fr': '',
@@ -527,7 +527,7 @@ const WORDS = {
     'm-syl': {
         'ja': 'ｼﾙ改',
         'en': 'S+',
-        'zh-TW': '希改'
+        'zh-TW': '希改',
         'zh-CH': '希改',
         'ko': 'S+?',
         'fr': '',
@@ -537,7 +537,7 @@ const WORDS = {
     'kamacite ore': {
         'ja': 'カマサイト鉱',
         'en': 'Kamacite Ore',
-        'zh-TW': '鐵紋礦石'
+        'zh-TW': '鐵紋礦石',
         'zh-CH': '铁纹矿石',
         'ko': 'Kamacite Ore?',
         'fr': '',
