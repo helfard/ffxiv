@@ -180,7 +180,6 @@ const result = new Vue({
     kyu: KYU_S,
     bonus: BONUS,
     para: PARA_S,
-    sum: SUM_S,
     seino: SEINO,
     parts: [], // 手持ちパーツのリスト
     rank: 0,
