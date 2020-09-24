@@ -20,7 +20,7 @@
 
     <section id="lang">
         <select v-model="lang">
-            <option v-for="lang in langs" :value="lang.id">{{ lang.name }}</option>
+            <option v-for="lang in langs" :value="lang.id" :lang="lang.id">{{ lang.name }}</option>
         </select>
     </section>
 
