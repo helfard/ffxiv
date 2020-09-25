@@ -16,10 +16,10 @@ const LANGS = [
 // EnglishはChocobo鯖のPaca Kumaさんに添削してもらいました。
 // 中文（繁體）はChocobo鯖のRondo Grantさんに作ってもらいました。
 // 中文（简体）はPandaemonium鯖のMarcquelort Ourauxさんにチェックしてもらいました。
-// 한국어はAegis鯖のPoly Dentさん（초코보鯖の폴리덴트さん）と名もなきヒカセンさんに作ってもらいました。
+// 한국어はAegis鯖のPoly Dentさん（초코보鯖の폴리덴트さん）と匿名のヒカセンさんに作ってもらいました。
 
 // ToDo:
-// Clearly I need some help to translate to Korean…
+// français and Deutsch
 
 const WORDS = {
     // 翻訳辞書
@@ -304,7 +304,7 @@ const WORDS = {
         'en': 'Cost',
         'zh-TW': 'Cost',
         'zh-CH': 'Cost',
-        'ko': 'Cost',
+        'ko': '비용',
         'fr': '',
         'de': '',
     },
@@ -495,7 +495,7 @@ const WORDS = {
         'en': 'S+',
         'zh-TW': '鯊改',
         'zh-CH': '鲨改',
-        'ko': 'S+?',
+        'ko': '신샤크', // You need not mind if these take more than 3 characters, as you see 2 is the best though.
         'fr': '',
         'de': '',
     },
@@ -504,7 +504,7 @@ const WORDS = {
         'en': 'U+',
         'zh-TW': '鱉改',
         'zh-CH': '鳖改',
-        'ko': 'U+?',
+        'ko': '신장갑',
         'fr': '',
         'de': '',
     },
@@ -513,7 +513,7 @@ const WORDS = {
         'en': 'W+',
         'zh-TW': '鯨改',
         'zh-CH': '鲸改',
-        'ko': 'W+?',
+        'ko': '신고래',
         'fr': '',
         'de': '',
     },
@@ -522,7 +522,7 @@ const WORDS = {
         'en': 'C+',
         'zh-TW': '棘改',
         'zh-CH': '棘改',
-        'ko': 'C+?',
+        'ko': '신실러',
         'fr': '',
         'de': '',
     },
@@ -531,7 +531,7 @@ const WORDS = {
         'en': 'S+',
         'zh-TW': '希改',
         'zh-CH': '希改',
-        'ko': 'S+?',
+        'ko': '신실드',
         'fr': '',
         'de': '',
     },
@@ -614,7 +614,7 @@ const WORDS = {
         'en': 'V',
         'zh-TW': '零式',
         'zh-CH': '零式',
-        'ko': 'V?',
+        'ko': '영식',
         'fr': '',
         'de': '',
     },
@@ -623,7 +623,7 @@ const WORDS = {
         'en': 'VI',
         'zh-TW': '絕',
         'zh-CH': '绝',
-        'ko': '영식',
+        'ko': '절',
         'fr': '',
         'de': '',
     },
@@ -741,7 +741,7 @@ const WORDS = {
         'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; Sea of Ash 1<br>-&gt; The Central Charnel Trench<br>-&gt; Sea of Ash 4',
         'zh-TW': '灰海 B→D→I→K',
         'zh-CH': '灰海 B→D→I→K',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 잿빛 바다 01<br>-&gt; 화장로 해구 중턱<br>-&gt; 잿빛 바다 04?',
+        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 잿빛 바다 01<br>-&gt; 화장로 해구 중턱<br>-&gt; 잿빛 바다 04',
         'fr': '',
         'de': '',
     },
