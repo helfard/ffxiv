@@ -19,7 +19,7 @@ const LANGS = [
 // 한국어はAegis鯖のPoly Dentさん（초코보鯖の폴리덴트さん）と匿名のヒカセンさんに作ってもらいました。
 
 // ToDo:
-// français and Deutsch
+// Clearly I need some help to translate to Korean…
 
 const WORDS = {
     // 翻訳辞書
@@ -368,7 +368,7 @@ const WORDS = {
         'en': 'Unkiu',
         'zh-TW': '甲鱉',
         'zh-CH': '甲鳖',
-        'ko': '장갑게급',
+        'ko': '철갑게급',
         'fr': '',
         'de': '',
     },
@@ -413,7 +413,7 @@ const WORDS = {
         'en': 'M-Unkiu',
         'zh-TW': '甲鱉改',
         'zh-CH': '甲鳖改',
-        'ko': '신 장갑게급',
+        'ko': '신 철갑게급',
         'fr': '',
         'de': '',
     },
@@ -459,7 +459,7 @@ const WORDS = {
         'en': 'U',
         'zh-TW': '鱉',
         'zh-CH': '鳖',
-        'ko': '장갑',
+        'ko': '철갑',
         'fr': '',
         'de': '',
     },
@@ -504,7 +504,7 @@ const WORDS = {
         'en': 'U+',
         'zh-TW': '鱉改',
         'zh-CH': '鳖改',
-        'ko': '신장갑',
+        'ko': '신철갑',
         'fr': '',
         'de': '',
     },
