@@ -4,7 +4,7 @@ const LANGS = [
     { id: 'en', name: 'English' },
     { id: 'zh-TW', name: '中文（繁體）' },
     { id: 'zh-CH', name: '中文（简体）' },
-    { id: 'ko', name: '한국어 in progress..' },
+    { id: 'ko', name: '한국어' },
 //    { id: 'fr', name: 'français' },
 //    { id: 'de', name: 'Deutsch' },
 ];
