@@ -25,7 +25,7 @@ const panel = new Vue({
     checkedButtons: [], // チェックされたボタン
     rank: 50,
     rankMin: 50,
-    rankMax: 75,
+    rankMax: 80,
     sharedState: store.state, // 共用データ
   },
   methods: {
