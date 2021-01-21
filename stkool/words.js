@@ -22,7 +22,7 @@ const LANGS = [
 // 한국어はAegis鯖のPoly Dentさん（초코보鯖の폴리덴트さん）と匿名のヒカセンさんに作ってもらいました。
 
 // ToDo:
-// Clearly I need some help to translate to Korean…
+// Clearly I need some help to translate to French and German…
 
 const WORDS = {
     // 翻訳辞書
