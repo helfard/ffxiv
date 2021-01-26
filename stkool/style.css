@@ -41,7 +41,7 @@ input[type=checkbox]:checked+.checkbox:before {
 }
 
 input[type=range].slider {
-    width: 340px;
+    width: 350px;
     height: 12px;
 }
 
