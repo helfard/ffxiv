@@ -66,8 +66,8 @@
                                 @click="checkAny(Array(20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39))">{{ WORDS['modified'][sharedState.lang] }}</a>
                         </div>
                         <div>
-                            <label class="label">{{ words['rank'][sharedState.lang] }} <input type="range"
-                                    v-model="rank" :min="rankMin" :max="rankMax" class="slider">
+                            <label class="label">{{ words['rank'][sharedState.lang] }}
+                                <input type="range" v-model="rank" :min="rankMin" :max="rankMax" class="slider">
                                 <span v-show="rank == rankMin">1-</span>{{ rank }}
                             </label>
                         </div>
