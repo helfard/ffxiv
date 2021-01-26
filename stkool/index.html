@@ -68,8 +68,7 @@
                         <div>
                             <label class="label">{{ words['rank'][sharedState.lang] }} <input type="range"
                                     v-model="rank" :min="rankMin" :max="rankMax" class="slider">
-                                <span v-show="rank == rankMin">1-</span>
-                                {{ rank }}
+                                <span v-show="rank == rankMin">1-</span>{{ rank }}
                             </label>
                         </div>
                     </div>
