@@ -136,142 +136,152 @@ BONUS[77] = [0, 34, 45, 21, 26, 25];
 BONUS[78] = [0, 36, 45, 23, 29, 27];
 BONUS[79] = [0, 38, 45, 25, 33, 28];
 BONUS[80] = [0, 40, 50, 25, 35, 30];
-const DEKIAI = [
+const DEKIAI = {
   // 定番構成（コスト, 探査性能, 収集性能, 巡航速度, 航続距離, 運）
-  [{
-    name: 'kamacite ore', // カマサイト鉱石
-    para: [null, 120, null, null, 47, null],
-    comment: 'deepsea y',
-  }, {
-    name: 'ii',
-    para: [null, 130, null, null, 84, null],
-    comment: 'deepsea yv',
-  }, {
-    name: 'iii',
-    para: [null, 130, null, null, 84, 100],
-    comment: 'deepsea yv',
-  }, {
-    name: 'iv',
-    para: [null, 130, null, null, 84, 105],
-    comment: 'deepsea yv',
-  }, {
-    name: 'v',
-    para: [null, 130, 140, null, 84, 105],
-    comment: 'deepsea yv',
-  }, {
-    name: 'vi',
-    para: [null, 130, 145, null, 84, 105],
-    comment: 'deepsea yv',
-  }, {
-    name: 'vii',
-    para: [null, 130, 190, null, 84, 105],
-    comment: 'deepsea yv',
-  }], [{
-    name: 'cocobolo lumber', // ココボロ材
-    para: [null, 145, null, null, 38, null],
-    comment: 'ashsea ab',
-  }, {
-    name: 'ii',
-    para: [null, 150, null, null, 63, null],
-    comment: 'ashsea bad',
-  }, {
-    name: 'iii',
-    para: [null, 155, null, null, 88, null],
-    comment: 'ashsea badf',
-  }, {
-    name: 'iv',
-    para: [null, 155, null, null, 88, 145],
-    comment: 'ashsea badf',
-  }, {
-    name: 'v',
-    para: [null, 155, 180, null, 88, 145],
-    comment: 'ashsea badf',
-  }, {
-    name: 'vi',
-    para: [null, 155, 220, null, 88, 145],
-    comment: 'ashsea badf',
-  }], [{
-    name: 'balsa wood scrap', // バルサ廃材
-    para: [null, 30, null, null, 38, null],
-    comment: 'deepsea gh',
-  }, {
-    name: 'ii',
-    para: [null, 35, null, null, 55, null],
-    comment: 'deepsea igh',
-  }, {
-    name: 'iii',
-    para: [null, 35, null, null, 55, 90],
-    comment: 'deepsea igh',
-  }, {
-    name: 'iv',
-    para: [null, 35, 75, null, 55, 90],
-    comment: 'deepsea igh',
-  }, {
-    name: 'v',
-    para: [null, 35, 105, null, 55, 90],
-    comment: 'deepsea igh',
-  }], [{
-    name: 'pure titanium ore', // ピュアチタン鉱
-    para: [null, 155, null, null, 74, null],
-    comment: 'ashsea aci',
-  }, {
-    name: 'ii',
-    para: [null, 160, null, null, 103, null],
-    comment: 'ashsea acil',
-  }, {
-    name: 'iii',
-    para: [null, 170, null, null, 138, null],
-    comment: 'ashsea acmil',
-  }, {
-    name: 'iv',
-    para: [null, 170, null, null, 138, 175],
-    comment: 'ashsea acmil',
-  }, {
-    name: 'v',
-    para: [null, 170, 240, null, 138, 175],
-    comment: 'ashsea acmil',
-  }], [{
-    name: 'cryptomeria log',
-    para: [null, 155, null, null, 76, null],
-    comment: 'ashsea bdi',
-  }, {
-    name: 'ii',
-    para: [null, 155, null, null, 109, null],
-    comment: 'ashsea bdik',
-  }, {
-    name: 'iii',
-    para: [null, 155, null, null, 109, 160],
-    comment: 'ashsea bdik',
-  }, {
-    name: 'iv',
-    para: [null, 155, 190, null, 109, 160],
-    comment: 'ashsea bdik',
-  }, {
-    name: 'v',
-    para: [null, 155, 230, null, 109, 160],
-    comment: 'ashsea bdik',
-    /*
-    }], [{
-      name: '',
-      para: [null, 0, null, null,  0, 0],
-      comment: ''
-    }, {
-      name: 'ii',
-      para: [null, 0, null, null,  0, 0],
-      comment: ''
-    */
-  }]
-];
-const SORT_KEYS = [ // ソート用のキー
-  { key: 'body', reverse: false },
-  { key: 'tail', reverse: false },
-  { key: 'head', reverse: false },
-  { key: 'bridge', reverse: false },
-  { key: 0, reverse: false },
-  { key: 1, reverse: true },
-  { key: 2, reverse: true },
-  { key: 3, reverse: true },
-  { key: 4, reverse: true },
-  { key: 5, reverse: true },
-  { key: 'sum', reverse: true }
-];
+  'kamacite ore': // カマサイト鉱石
+    [
+      {
+        name: 'i',
+        para: [null, 120, null, null, 47, null],
+        comment: 'deepsea y',
+      }, {
+        name: 'ii',
+        para: [null, 130, null, null, 84, null],
+        comment: 'deepsea yv',
+      }, {
+        name: 'iii',
+        para: [null, 130, null, null, 84, 100],
+        comment: 'deepsea yv',
+      }, {
+        name: 'iv',
+        para: [null, 130, null, null, 84, 105],
+        comment: 'deepsea yv',
+      }, {
+        name: 'v',
+        para: [null, 130, 140, null, 84, 105],
+        comment: 'deepsea yv',
+      }, {
+        name: 'vi',
+        para: [null, 130, 145, null, 84, 105],
+        comment: 'deepsea yv',
+      }, {
+        name: 'vii',
+        para: [null, 130, 190, null, 84, 105],
+        comment: 'deepsea yv',
+      }
+    ],
+  'cocobolo lumber': // ココボロ材
+    [
+      {
+        name: 'i',
+        para: [null, 145, null, null, 38, null],
+        comment: 'ashsea ab',
+      }, {
+        name: 'ii',
+        para: [null, 150, null, null, 63, null],
+        comment: 'ashsea bad',
+      }, {
+        name: 'iii',
+        para: [null, 155, null, null, 88, null],
+        comment: 'ashsea badf',
+      }, {
+        name: 'iv',
+        para: [null, 155, null, null, 88, 145],
+        comment: 'ashsea badf',
+      }, {
+        name: 'v',
+        para: [null, 155, 180, null, 88, 145],
+        comment: 'ashsea badf',
+      }, {
+        name: 'vi',
+        para: [null, 155, 220, null, 88, 145],
+        comment: 'ashsea badf',
+      }
+    ],
+  'balsa wood scrap': // バルサ廃材
+    [
+      {
+        name: 'i',
+        para: [null, 30, null, null, 38, null],
+        comment: 'deepsea gh',
+      }, {
+        name: 'ii',
+        para: [null, 35, null, null, 55, null],
+        comment: 'deepsea igh',
+      }, {
+        name: 'iii',
+        para: [null, 35, null, null, 55, 90],
+        comment: 'deepsea igh',
+      }, {
+        name: 'iv',
+        para: [null, 35, 75, null, 55, 90],
+        comment: 'deepsea igh',
+      }, {
+        name: 'v',
+        para: [null, 35, 105, null, 55, 90],
+        comment: 'deepsea igh',
+      }
+    ],
+  'pure titanium ore': // ピュアチタン鉱
+    [
+      {
+        name: 'i',
+        para: [null, 155, null, null, 74, null],
+        comment: 'ashsea aci',
+      }, {
+        name: 'ii',
+        para: [null, 160, null, null, 103, null],
+        comment: 'ashsea acil',
+      }, {
+        name: 'iii',
+        para: [null, 170, null, null, 138, null],
+        comment: 'ashsea acmil',
+      }, {
+        name: 'iv',
+        para: [null, 170, null, null, 138, 175],
+        comment: 'ashsea acmil',
+      }, {
+        name: 'v',
+        para: [null, 170, 240, null, 138, 175],
+        comment: 'ashsea acmil',
+      }
+    ],
+  'cryptomeria log': // クリプトメリア原木
+    [
+      {
+        name: 'i',
+        para: [null, 155, null, null, 76, null],
+        comment: 'ashsea bdi',
+      }, {
+        name: 'ii',
+        para: [null, 155, null, null, 109, null],
+        comment: 'ashsea bdik',
+      }, {
+        name: 'iii',
+        para: [null, 155, null, null, 109, 160],
+        comment: 'ashsea bdik',
+      }, {
+        name: 'iv',
+        para: [null, 155, 190, null, 109, 160],
+        comment: 'ashsea bdik',
+      }, {
+        name: 'v',
+        para: [null, 155, 230, null, 109, 160],
+        comment: 'ashsea bdik',
+      }
+      /*
+      ],
+    'item name':
+      [
+        {
+          name: 'i',
+          para: [null, 0, null, null,  0, 0],
+          comment: ''
+        }, {
+          name: 'ii',
+          para: [null, 0, null, null,  0, 0],
+          comment: ''
+        }
+      */
+    ]
+};

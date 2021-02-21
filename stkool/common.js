@@ -1,54 +1,55 @@
 const DEBUG = false; // デバッグモード
 const log = msg => {
   // デバッグ用のメッセージの表示
-  let date = new Date();
-  if (DEBUG) console.log(date.getSeconds() + ' ' + msg);
+  const SEC = new Date().getSeconds();
+  if (DEBUG) console.log(SEC + ' ' + msg);
 };
+
+const CONFIG = {
+  // 基本設定
+  name: 'Submersible Maker',
+  ver: '5.450221',
+  auther: 'Omochi Kinako (Chocobo)',
+  url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
+  rankMin: 50, // ランクの最小値
+  rankMax: 80, // ランクの最大値
+}
 
 const store = {
   // 共用データ
   state: {
-    name: 'Submersible Maker',
-    ver: '5.400127',
-    auther: 'Omochi Kinako (Chocobo)',
-    url:
-      'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
     lang: 'ja', // 言語設定
   },
-  setLang: function (lang) {
-    log('Store:');
-    log(' SetLang: ' + lang);
+  setLanguage: function (lang) {
+    // 表示言語を変更
     this.state.lang = lang;
     document.documentElement.lang = lang;
+    log('Store: SetLang: ' + lang);
   },
 };
 
 const language = new Vue({
   // 言語設定
-  el: '#lang',
+  el: '#language',
   data: {
-    langs: LANGS, // 言語リスト
-    lang: 'ja', // 言語設定（ローカル）
-    storelang: store.state.lang, // 言語設定（グローバル）
-    // データ変更時のトリガー監視の都合でローカルとグローバルは分けた方が都合が良かった。
+    currentLang: 'ja', // 言語設定（共用データとは別に保持した方が監視上の都合が良い）
+    // LANGS: 言語リスト
+  },
+  methods: {
+    setLanguage: function (lang) {
+      this.currentLang = lang;
+      // ローカルストレージに言語設定を保存
+      localStorage.setItem('language', lang);
+      store.setLanguage(lang); // 言語設定を変更
+    }
   },
   mounted: function () {
     // ローカルストレージから言語設定を所得
-    const LANG = localStorage.getItem('lang');
-    if (LANG) {
-      this.lang = LANG; // 言語設定を変更
-      log('Language:');
-      log(' LocalStorage(Get): ' + LANG);
-      store.setLang(LANG); // 言語設定を変更
+    let lang = localStorage.getItem('language');
+    if (lang) {
+      this.currentLang = lang; // 言語設定を変更
+      store.setLanguage(lang); // 言語設定を変更
     }
-  },
-  updated: function () {
-    // ローカルストレージに言語設定を保存
-    const LANG = this.lang;
-    localStorage.setItem('lang', LANG);
-    log('Language:');
-    log(' LocalStorage(Set): ' + LANG);
-    store.setLang(LANG); // 言語設定を変更
   },
 });
 
@@ -56,17 +57,16 @@ const header = new Vue({
   // ヘッダー
   el: '#title',
   data: {
-    words: WORDS, // 辞書データ
     sharedState: store.state, // 共用データ
+    // WORDS: 辞書データ
+    // CONFIG: 基本設定
   },
   methods: {
     setTitle: function () {
       // タイトルをセット
-      const TITLE = this.words['title'][this.sharedState.lang];
-      document.title = TITLE;
-      document.getElementById('title').textContent = TITLE;
-      log('Header:');
-      log(' SetTitle: ' + TITLE);
+      let title = WORDS['title'][this.sharedState.lang];
+      document.title = title;
+      log('Header: SetTitle: ' + title);
     },
   },
   updated: function () {
@@ -81,7 +81,40 @@ const address = new Vue({
   // フッター
   el: '#address',
   data: {
-    words: WORDS, // 辞書データ
-    sharedState: store.state, // 共用データ
+    storageVersion: 1, // ローカルストレージの保存形式の版
+    // INFO: 基本設定
   },
+  methods: {
+    checkLocalstorageVersion: function () {
+      // ローカルストレージの形式の版が異なる場合は一度全て削除する
+      let currentVersion = this.storageVersion;
+      let savedVersion = localStorage.getItem('storageVersion') - 0;
+      if (currentVersion !== savedVersion) {
+        localStorage.clear();
+        localStorage.setItem('storageVersion', currentVersion);
+        log('Footer: LocalStorage(Clear)');
+      }
+    }
+  },
+  mounted: function () {
+    this.checkLocalstorageVersion();
+  }
 });
+
+const execCopy = string => {
+  // 任意の文字列ををクリップボードにコピー
+  // https://qiita.com/simiraaaa/items/2e7478d72f365aa48356 からパクった
+  let tmp = document.createElement('div');
+  let pre = document.createElement('pre');
+  pre.style.webkitUserSelect = 'auto';
+  pre.style.userSelect = 'auto';
+  tmp.appendChild(pre).textContent = string;
+  let s = tmp.style;
+  s.position = 'fixed';
+  s.right = '200%';
+  document.body.appendChild(tmp);
+  document.getSelection().selectAllChildren(tmp);
+  let result = document.execCommand("copy");
+  document.body.removeChild(tmp);
+  return result;
+}

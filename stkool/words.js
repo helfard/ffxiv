@@ -8,8 +8,8 @@ const LANGS = [
     { id: 'zh-TW', name: '中文（繁體）' },
     { id: 'zh-CH', name: '中文（简体）' },
     { id: 'ko', name: '한국어' },
-//    { id: 'fr', name: 'français' },
-//    { id: 'de', name: 'Deutsch' },
+    //    { id: 'fr', name: 'français' },
+    //    { id: 'de', name: 'Deutsch' },
 ];
 
 // メモ：
@@ -63,7 +63,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'normal': {
+    'normal all': {
         'ja': '旧パーツ全て',
         'en': 'Normal',
         'zh-TW': '一般部件全部',
@@ -72,7 +72,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'modified': {
+    'modified all': {
         'ja': '改級パーツ全て',
         'en': 'Modified',
         'zh-TW': '改級部件全部',
@@ -118,6 +118,52 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
+    'memo': {
+        'ja': 'MEMO',
+        'en': 'MEMO',
+        'zh-TW': 'MEMO',
+        'zh-CH': 'MEMO',
+        'ko': 'MEMO',
+        'fr': '',
+        'de': '',
+    },
+    'default memo': {
+        'ja': 'MEMO',
+        'en': 'MEMO',
+        'zh-TW': 'MEMO',
+        'zh-CH': 'MEMO',
+        'ko': 'MEMO',
+        'fr': '',
+        'de': '',
+    },
+    'save': {
+        'ja': 'SAVE',
+        'en': 'SAVE',
+        'zh-TW': 'SAVE',
+        'zh-CH': 'SAVE',
+        'ko': 'SAVE',
+        'fr': '',
+        'de': '',
+    },
+    'load': {
+        'ja': 'LOAD',
+        'en': 'LOAD',
+        'zh-TW': 'LOAD',
+        'zh-CH': 'LOAD',
+        'ko': 'LOAD',
+        'fr': '',
+        'de': '',
+    },
+    'confirm override': {
+        'ja': 'そのスロットには既にデータが保存されています。\n現在の値で上書きしますか？',
+        'en': 'Override?',
+        'zh-TW': 'Override?',
+        'zh-CH': 'Override?',
+        'ko': 'Override?',
+        'fr': '',
+        'de': '',
+    },
+/*
     'comment': {
         'ja': '説明',
         'en': 'Description',
@@ -136,8 +182,9 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
+*/
 
-    'list': {
+    'result list': {
         'ja': '構成一覧',
         'en': 'Results',
         'zh-TW': '組成一覽',
@@ -146,9 +193,9 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'nomatch': {
+    'no results': {
         'ja': '条件を満たす組み合わせが存在しません。',
-        'en': 'No match there.',
+        'en': 'No results found.',
         'zh-TW': '沒辦法組出這個條件的組合。',
         'zh-CH': '组成一览',
         'ko': '조건을 만족하는 조합이 존재하지 않습니다.',
@@ -164,7 +211,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'too many': {
+    'too many results': {
         'ja': '組み合わせが多すぎて表示できません。',
         'en': 'There are too many submersibles to show all.',
         'zh-TW': '組合有太多種了無法顯示。',
@@ -173,7 +220,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'show all': {
+    'show all results': {
         'ja': '無理矢理表示する！（重い）',
         'en': 'Show all!! (CAUTION: LAGGY!!!)',
         'zh-TW': '我全都要!! (電腦哀號)',
@@ -182,7 +229,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'hide': {
+    'limit results': {
         'ja': '縮小表示に戻す。',
         'en': 'Back to limited mode.',
         'zh-TW': '變回精簡模式',
@@ -191,7 +238,7 @@ const WORDS = {
         'fr': '',
         'de': '',
     },
-    'copy': {
+    'copy chedked submersibles': {
         'ja': 'チェックしたデータをコピーする。',
         'en': 'Copy checked submersibles.',
         'zh-TW': '複製選取的資料。',
@@ -585,6 +632,15 @@ const WORDS = {
         'de': '',
     },
 
+    'i': {
+        'ja': 'N',
+        'en': 'I',
+        'zh-TW': 'N',
+        'zh-CH': 'N',
+        'ko': 'N',
+        'fr': '',
+        'de': '',
+    },
     'ii': {
         'ja': '真',
         'en': 'II',
@@ -642,109 +698,109 @@ const WORDS = {
 
     'deepsea y': {
         'ja': '溺没海 Y',
-        'en': 'Deep-Sea Site:<br>Flickering Dip', // <br> means line break.
+        'en': 'Deep-Sea Site:\nFlickering Dip', // \n means line break.
         'zh-TW': '溺沒海 Y',
         'zh-CH': '溺没海 Y',
-        'ko': '익몰해:<br>저녁놀 열곡',
+        'ko': '익몰해:\n저녁놀 열곡',
         'fr': '',
         'de': '',
     },
     'deepsea yv': {
         'ja': '溺没海 Y→V',
-        'en': 'Deep-Sea Site:<br>Flickering Dip<br>-&gt; The Rimilala Shelf', // “-&gt;” = “->”
+        'en': 'Deep-Sea Site:\nFlickering Dip\n-> The Rimilala Shelf', // “->” = “->”
         'zh-TW': '溺沒海 Y→V',
         'zh-CH': '溺没海 Y→V',
-        'ko': '익몰해:<br>저녁놀 열곡<br>-&gt; 라미라라 해구 급경사면',
+        'ko': '익몰해:\n저녁놀 열곡\n-> 라미라라 해구 급경사면',
         'fr': '',
         'de': '',
     },
     'ashsea ab': {
         'ja': '灰海 A→B',
-        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan',
+        'en': 'Sea of Ash:\nWreckage of the Windwalker\n-> South Isle of Zozonan',
         'zh-TW': '灰海 A→B',
         'zh-CH': '灰海 A→B',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 조조난 섬 남단',
+        'ko': '잿빛 바다:\n풍운호 잔해\n-> 조조난 섬 남단',
         'fr': '',
         'de': '',
     },
     'ashsea bad': {
         'ja': '灰海 B→A→D',
-        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1',
+        'en': 'Sea of Ash:\nWreckage of the Windwalker\n-> South Isle of Zozonan\n-> Sea of Ash 1',
         'zh-TW': '灰海 B→A→D',
         'zh-CH': '灰海 B→A→D',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 조조난 섬 남단<br>-&gt; 잿빛 바다 01',
+        'ko': '잿빛 바다:\n풍운호 잔해\n-> 조조난 섬 남단\n-> 잿빛 바다 01',
         'fr': '',
         'de': '',
     },
     'ashsea badf': {
         'ja': '灰海 B→A→D→F',
-        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; South Isle of Zozonan<br>-&gt; Sea of Ash 1<br> -&gt; Sea of Ash 2',
+        'en': 'Sea of Ash:\nWreckage of the Windwalker\n-> South Isle of Zozonan\n-> Sea of Ash 1\n -> Sea of Ash 2',
         'zh-TW': '灰海 B→A→D→F',
         'zh-CH': '灰海 B→A→D→F',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 조조난 섬 남단<br>-&gt; 잿빛 바다 01<br> -&gt; 잿빛 바다 02',
+        'ko': '잿빛 바다:\n풍운호 잔해\n-> 조조난 섬 남단\n-> 잿빛 바다 01\n -> 잿빛 바다 02',
         'fr': '',
         'de': '',
     },
     'deepsea gh': {
         'ja': '溺没海 G→H',
-        'en': 'Deep-Sea Site:<br>-&gt; The Umbrella Narrow<br>-&gt; Offender&#39;s Rot',
+        'en': 'Deep-Sea Site:\n-> The Umbrella Narrow\n-> Offender&#39;s Rot',
         'zh-TW': '溺沒海 G→H',
         'zh-CH': '溺没海 G→H',
-        'ko': '익몰해:<br>-&gt; 우산 해협<br>-&gt; 포로섬',
+        'ko': '익몰해:\n-> 우산 해협\n-> 포로섬',
         'fr': '',
         'de': '',
     },
     'deepsea igh': {
         'ja': '溺没海 I→G→H',
-        'en': 'Deep-Sea Site:<br>-&gt; Neolith Island<br>-&gt; The Umbrella Narrow<br>-&gt; Offender&#39;s Rot',
+        'en': 'Deep-Sea Site:\n-> Neolith Island\n-> The Umbrella Narrow\n-> Offender&#39;s Rot',
         'zh-TW': '溺沒海 I→G→H',
         'zh-CH': '溺没海 I→G→H',
-        'ko': '익몰해:<br>-&gt; 석인도<br>-&gt; 우산 해협<br>-&gt; 포로섬',
+        'ko': '익몰해:\n-> 석인도\n-> 우산 해협\n-> 포로섬',
         'fr': '',
         'de': '',
     },
     'ashsea aci': {
         'ja': '灰海 A→C→I',
-        'en': 'Sea of Ash:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench',
+        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Central Charnel Trench',
         'zh-TW': '灰海 A→C→I',
         'zh-CH': '灰海 A→C→I→L',
-        'ko': '잿빛 바다:<br>조조난 섬 남단<br>-&gt; 조조난 섬 북단<br>-&gt; 화장로 해구 중턱',
+        'ko': '잿빛 바다:\n조조난 섬 남단\n-> 조조난 섬 북단\n-> 화장로 해구 중턱',
         'fr': '',
         'de': '',
     },
     'ashsea acil': {
         'ja': '灰海 A→C→I→L',
-        'en': 'Sea of Ash:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Central Charnel Trench<br>-&gt; The Lone Glove',
+        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Central Charnel Trench\n-> The Lone Glove',
         'zh-TW': '灰海 A→C→I→L',
         'zh-CH': '灰海 A→C→I→L',
-        'ko': '잿빛 바다:<br>조조난 섬 남단<br>-&gt; 조조난 섬 북단<br>-&gt; 화장로 해구 중턱<br>-&gt; 짝짝이 장갑 섬',
+        'ko': '잿빛 바다:\n조조난 섬 남단\n-> 조조난 섬 북단\n-> 화장로 해구 중턱\n-> 짝짝이 장갑 섬',
         'fr': '',
         'de': '',
     },
     'ashsea acmil': {
         'ja': '灰海 A→C→M→I→L',
-        'en': 'Sea of Ash:<br>South Isle of Zozonan<br>-&gt; North Isle of Zozonan<br>-&gt; The Midden Pit<br>-&gt; The Central Charnel Trench<br>-&gt; The Lone Glove',
+        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Midden Pit\n-> The Central Charnel Trench\n-> The Lone Glove',
         'zh-TW': '灰海 A→C→M→I→L',
         'zh-CH': '灰海 A→C→M→I→L',
-        'ko': '잿빛 바다:<br>조조난 섬 남단<br>-&gt; 조조난 섬 북단<br>-&gt; 자갈 해분<br>-&gt; 화장로 해구 중턱<br>-&gt; 짝짝이 장갑 섬',
+        'ko': '잿빛 바다:\n조조난 섬 남단\n-> 조조난 섬 북단\n-> 자갈 해분\n-> 화장로 해구 중턱\n-> 짝짝이 장갑 섬',
         'fr': '',
         'de': '',
     },
     'ashsea bdi': {
         'ja': '灰海 B→D→I',
-        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; Sea of Ash 1<br>-&gt; The Central Charnel Trench',
+        'en': 'Sea of Ash:\nWreckage of the Windwalker\n-> Sea of Ash 1\n-> The Central Charnel Trench',
         'zh-TW': '灰海 B→D→I',
         'zh-CH': '灰海 B→D→I',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 잿빛 바다 01<br>-&gt; 화장로 해구 중턱',
+        'ko': '잿빛 바다:\n풍운호 잔해\n-> 잿빛 바다 01\n-> 화장로 해구 중턱',
         'fr': '',
         'de': '',
     },
     'ashsea bdik': {
         'ja': '灰海 B→D→I→K',
-        'en': 'Sea of Ash:<br>Wreckage of the Windwalker<br>-&gt; Sea of Ash 1<br>-&gt; The Central Charnel Trench<br>-&gt; Sea of Ash 4',
+        'en': 'Sea of Ash:\nWreckage of the Windwalker\n-> Sea of Ash 1\n-> The Central Charnel Trench\n-> Sea of Ash 4',
         'zh-TW': '灰海 B→D→I→K',
         'zh-CH': '灰海 B→D→I→K',
-        'ko': '잿빛 바다:<br>풍운호 잔해<br>-&gt; 잿빛 바다 01<br>-&gt; 화장로 해구 중턱<br>-&gt; 잿빛 바다 04',
+        'ko': '잿빛 바다:\n풍운호 잔해\n-> 잿빛 바다 01\n-> 화장로 해구 중턱\n-> 잿빛 바다 04',
         'fr': '',
         'de': '',
     },
