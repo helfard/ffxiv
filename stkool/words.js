@@ -5,8 +5,8 @@ const LANGS = [
     // 言語リスト
     { id: 'ja', name: '日本語' },
     { id: 'en', name: 'English' },
-    { id: 'zh-TW', name: '中文（繁體）' },
-    { id: 'zh-CH', name: '中文（简体）' },
+    { id: 'zh-TW', name: '繁體中文' },
+    { id: 'zh-CH', name: '简体中文' },
     { id: 'ko', name: '한국어' },
     //    { id: 'fr', name: 'français' },
     //    { id: 'de', name: 'Deutsch' },
