@@ -78,13 +78,11 @@
                             {{ WORDS['modified all'][sharedState.lang] }}
                         </button>
                     </div>
-                    <div>
-                        <label class="label">{{ WORDS['rank'][sharedState.lang] }}
-                            <input type="range" v-model.number.lazy="rank" :min="rankMin" :max="rankMax"
-                                class="slider">
-                            <span v-show="rank === rankMin">1-</span>{{ rank }}
-                        </label>
-                    </div>
+                    <label class="label">{{ WORDS['rank'][sharedState.lang] }}
+                        <input type="range" v-model.number.lazy="rank" :min="rankMin" :max="rankMax"
+                            class="slider">
+                        <span v-show="rank === rankMin">1-</span>{{ rank }}
+                    </label>
                 </div>
             </div>
 
