@@ -118,44 +118,42 @@
                             </label>
                         </div>
                     </div>
-                    <div>
-                        <label class="label">
-                            {{ WORDS['memo'][sharedState.lang] }}
-                            <textarea rows="3" class="textarea" v-model.lazy="memo"
-                                :placeholder="WORDS['default memo'][sharedState.lang]"></textarea>
-                        </label>
-                        <label class="label">
-                            {{ WORDS['save'][sharedState.lang] }}/{{ WORDS['load'][sharedState.lang] }}
-                            <div class="columns is-mobile">
-                                <div class="column is-narrow">
-                                    <div class="buttons has-addons">
-                                        <button class="button is-small"
-                                            :class="{ 'is-selected is-info': saveFlag }"
-                                            :style="{ width: saveFlag ? '60px' : '20px' }"
-                                            @click="toggleSaveFlag()">
-                                            {{ saveFlag ? WORDS['save'][sharedState.lang] : '' }}
-                                        </button>
-                                        <button class="button is-small"
-                                            :class="{ 'is-selected is-info': !saveFlag }"
-                                            :style="{ width: !saveFlag ? '60px' : '20px' }"
-                                            @click="toggleSaveFlag()">
-                                            {{ saveFlag ? '' : WORDS['load'][sharedState.lang] }}
-                                        </button>
+                    <label class="label">
+                        {{ WORDS['memo'][sharedState.lang] }}
+                        <textarea rows="3" class="textarea" v-model.lazy="memo"
+                            :placeholder="WORDS['default memo'][sharedState.lang]"></textarea>
+                    </label>
+                    <label class="label">
+                        {{ WORDS['save'][sharedState.lang] }}/{{ WORDS['load'][sharedState.lang] }}
+                        <div class="columns is-mobile">
+                            <div class="column is-narrow">
+                                <div class="buttons has-addons">
+                                    <button class="button is-small"
+                                        :class="{ 'is-selected is-info': saveFlag }"
+                                        :style="{ width: saveFlag ? '60px' : '20px' }"
+                                        @click="toggleSaveFlag()">
+                                        {{ saveFlag ? WORDS['save'][sharedState.lang] : '' }}
+                                    </button>
+                                    <button class="button is-small"
+                                        :class="{ 'is-selected is-info': !saveFlag }"
+                                        :style="{ width: !saveFlag ? '60px' : '20px' }"
+                                        @click="toggleSaveFlag()">
+                                        {{ saveFlag ? '' : WORDS['load'][sharedState.lang] }}
+                                    </button>
 
-                                    </div>
-                                </div>
-                                <div class="column">
-                                    <div class="buttons has-addons">
-                                        <button v-for="index in maxSlot" class="button is-small"
-                                            :class="{ 'is-info': slotData[index] }"
-                                            @click="toggleSlot(index)">
-                                            {{ index }}
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
-                        </label>
-                    </div>
+                            <div class="column">
+                                <div class="buttons has-addons">
+                                    <button v-for="index in maxSlot" class="button is-small"
+                                        :class="{ 'is-info': slotData[index] }"
+                                        @click="toggleSlot(index)">
+                                        {{ index }}
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </label>
                 </div>
             </div>
         </div>
