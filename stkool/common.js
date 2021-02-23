@@ -11,8 +11,6 @@ const CONFIG = {
   ver: '5.450221',
   auther: 'Omochi Kinako (Chocobo)',
   url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
-  rankMin: 50, // ランクの最小値
-  rankMax: 80, // ランクの最大値
 }
 
 const store = {
