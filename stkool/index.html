@@ -80,9 +80,9 @@
                     </div>
                     <div>
                         <label class="label">{{ WORDS['rank'][sharedState.lang] }}
-                            <input type="range" v-model.number.lazy="rank" :min="CONFIG.rankMin" :max="CONFIG.rankMax"
+                            <input type="range" v-model.number.lazy="rank" :min="rankMin" :max="rankMax"
                                 class="slider">
-                            <span v-show="rank === CONFIG.rankMin">1-</span>{{ rank }}
+                            <span v-show="rank === rankMin">1-</span>{{ rank }}
                         </label>
                     </div>
                 </div>
