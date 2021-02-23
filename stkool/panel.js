@@ -4,6 +4,8 @@ const panel = new Vue({
   data: {
     checkedButtons: [...Array(18).keys(), 18, 19], // チェックされたボタン
     rank: 50, // ランク
+    rankMin: 50, // ランクの最小値
+    rankMax: 80, // ランクの最大値
     sharedState: store.state, // 共用データ
     // WORDS: 辞書データ
     // BUI: 部位
