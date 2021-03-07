@@ -1,0 +1,28 @@
+#counter .parts {
+    position: relative;
+}#counter .parts::after {
+    position: absolute;
+    font-size: small;
+    top: 15%;
+    right: -14px;
+}
+#counter .used_0::after {
+    content: "";
+}
+#counter .used_1::after {
+    content: "-1";
+}
+#counter .used_2::after {
+    content: "-2";
+}
+#counter .used_3::after {
+    content: "-3";
+}
+#counter .used_4::after {
+    content: "-4";
+}
+
+#counter input[type=range].slider {
+    width: 355px;
+    height: 12px;
+}

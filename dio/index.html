@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <link rel="stylesheet" href="../bulma.min.css">
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="counter.css">
+    <link rel="stylesheet" href="dock.css">
+    <script src="../vue.min.js"></script>
+</head>
+
+<body>
+    <header class="hero is-primary is-bold">
+        <div class="hero-body">
+            <h1 class="title container" id="title">{{ WORDS['title'][sharedState.lang] }}</h1>
+        </div>
+    </header>
+
+    <section class="container" id="language">
+        <div class="buttons has-addons">
+            <button class="button is-small" v-for="lang in LANGS" :lang="lang.id"
+                :class="{ 'is-warning is-info': lang.id === currentLang }"
+                @click="setLanguage(lang.id)">
+                {{ lang.name }}
+            </button>
+        </div>
+    </section>
+
+    <section class="section container">
+        <div class="columns is-desktop">
+
+            <div class="column is-narrow" style="width: 500px;">
+                <div class="box content field" id="counter">
+                    <h2 class="subtitle">{{ WORDS['preferences'][sharedState.lang] }}</h2>
+                    <table class="table is-hoverable">
+                        <thead>
+                            <tr>
+                                <th class="has-text-centered">
+                                    <a @click="addAll()">{{ WORDS['class'][sharedState.lang] }}</a>
+                                </th>
+                                <th class="has-text-centered" v-for="bui in BUI">
+                                    {{ WORDS[bui][sharedState.lang] }}
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(kyu, kindex) in KYU">
+                                <th class="has-text-centered">
+                                    <a @click="addLine(kindex)">
+                                        {{ WORDS[kyu][sharedState.lang] }}
+                                    </a>
+                                </th>
+                                <td v-for="(bui, bindex) in BUI" class="has-text-centered">
+                                    <a @click="addOne(kindex * 4 + bindex)" class="parts has-text-weight-bold" :class="'used_' + partsUsed[kindex * 4 + bindex]">
+                                        {{ partsBox[kindex * 4 + bindex] }}
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot>
+                            <tr>
+                                <th class="has-text-centered">
+                                    <a @click="addAll()">{{ WORDS['class'][sharedState.lang] }}</a>
+                                </th>
+                                <th class="has-text-centered" v-for="bui in BUI">
+                                    {{ WORDS[bui][sharedState.lang] }}
+                                </th>
+                            </tr>
+                        </tfoot>
+                    </table>
+                    <label class="label">{{ WORDS['rank'][sharedState.lang] }}
+                        <input type="range" v-model.lazy="rank"
+                            :min="rankMin" :max="rankMax" class="slider">
+                        <span v-show="rank === rankMin">1-</span>{{ rank }}
+                    </label>
+                    <div class="columns">
+                        <div class="column">
+                            <div class="buttons is-centered">
+                                <button @click="clearAll()" class="button is-warning">
+                                    {{ WORDS['reset'][sharedState.lang] }}
+                                </button>
+                            </div>
+                        </div>
+                        <div class="column">
+                            <div class="buttons has-addons is-centered">
+                                <button class="button" @click="saveParts()">
+                                    {{ WORDS['save'][sharedState.lang] }}
+                                </button>
+                                <button class="button" @click="loadParts()">
+                                    {{ WORDS['load'][sharedState.lang] }}
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column is-narrow" style="width: 500px;">
+                <div class="box content field" id="filter">
+                    <h2 class="subtitle">{{ WORDS['filter'][sharedState.lang] }}</h2>
+                    <div class="columns is-mobile">
+                        <div class="column is-narrow" style="width: 120px;">
+                            <label v-for="(para, index) in PARA" class="label">
+                                {{ WORDS[para][sharedState.lang] }}
+                                <input type="number" min="0" max="255"
+                                    v-model.number="atai[index]" class="input">
+                            </label>
+                        </div>
+                        <div class="column">
+                            <label class="label">
+                                {{ WORDS['reset'][sharedState.lang] }}<br>
+                                <button @click="clearAll()" class="button is-warning">
+                                    {{ WORDS['reset'][sharedState.lang] }}
+                                </button>
+                            </label>
+                            <label class="label">
+                                {{ WORDS['preset'][sharedState.lang] }}
+                                <div v-for="(data, item) in DEKIAI" style="font-weight:400">
+                                    <span v-for="(set, index) in data">
+                                        <a @click="setTemplate(item, index)" class="button is-text is-paddingless">
+                                            <span v-if="index">{{ WORDS[set.name][sharedState.lang] }}</span>
+                                            <span v-else>{{ WORDS[item][sharedState.lang] }}</span>
+                                            <span v-show="index !== data.length - 1">/</span>
+                                        </a>
+                                    </span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="label">
+                            {{ WORDS['memo'][sharedState.lang] }}
+                            <textarea rows="3" class="textarea" v-model.lazy="memo"
+                                :placeholder="WORDS['default memo'][sharedState.lang]"></textarea>
+                        </label>
+                        <label class="label">
+                            {{ WORDS['save'][sharedState.lang] }}/{{ WORDS['load'][sharedState.lang] }}
+                            <div class="columns is-mobile">
+                                <div class="column is-narrow">
+                                    <div class="buttons has-addons">
+                                        <button class="button is-small"
+                                            :class="{ 'is-selected is-info': saveFlag }"
+                                            :style="{ width: saveFlag ? '60px' : '20px' }"
+                                            @click="toggleSaveFlag()">
+                                            {{ saveFlag ? WORDS['save'][sharedState.lang] : '' }}
+                                        </button>
+                                        <button class="button is-small"
+                                            :class="{ 'is-selected is-info': !saveFlag }"
+                                            :style="{ width: !saveFlag ? '60px' : '20px' }"
+                                            @click="toggleSaveFlag()">
+                                            {{ saveFlag ? '' : WORDS['load'][sharedState.lang] }}
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="column">
+                                    <div class="buttons has-addons is-centered">
+                                        <button v-for="index in maxSlot" class="button is-small"
+                                            :class="{ 'is-info': slotData[index] }"
+                                            @click="toggleSlot(index)">
+                                            {{ index }}
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="box content" id="dock" style="width: 630px;">
+            <h2 class="subtitle">{{ WORDS['dock'][sharedState.lang] }}</h2>
+            <h3>{{ WORDS['built list'][sharedState.lang] }}</h3>
+            <p id="clipboard">
+                {{ WORDS['remove from dock'][sharedState.lang] }}
+
+                
+                <a v-show="docks.length" @click="copyShips()">
+                    {{ WORDS['copy submersibles'][sharedState.lang] }}
+                </a>
+            </p>
+            <table class="table is-narrow is-hoverable">
+                <thead>
+                    <tr>
+                        <th v-for="(bui, index) in BUI" class="has-text-centered">
+                            {{ WORDS[bui][sharedState.lang] }}
+                        </th>
+                        <th class="has-text-right">
+                            {{ WORDS['rank'][sharedState.lang] }}
+                        </th>
+                        <th v-for="(para, index) in PARA_S" class="has-text-right">
+                            {{ WORDS[para][sharedState.lang] }}
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(ship, index) in docks" @click="removeFromDock(index)">
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.body]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.tail]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.head]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.bridge]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-right">
+                            {{ ship.rank }}
+                        </td>
+                        <td v-for="param in ship.para" class="has-text-right">
+                            {{ param }}
+                        </td>
+                    </tr>
+                    <tr v-show="!docks[0]"><td colspan="10" class="has-text-centered">{{ WORDS['empty dock'][sharedState.lang] }}</td></tr>
+                    <tr v-show="!docks[1]"><td colspan="10" class="has-text-centered">{{ WORDS['empty dock'][sharedState.lang] }}</td></tr>
+                    <tr v-show="!docks[2]"><td colspan="10" class="has-text-centered">{{ WORDS['empty dock'][sharedState.lang] }}</td></tr>
+                    <tr v-show="!docks[3]"><td colspan="10" class="has-text-centered">{{ WORDS['empty dock'][sharedState.lang] }}</td></tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th v-for="(bui, index) in BUI" class="has-text-centered">
+                            {{ WORDS[bui][sharedState.lang] }}
+                        </th>
+                        <th class="has-text-right">
+                            {{ WORDS['rank'][sharedState.lang] }}
+                        </th>
+                        <th v-for="(para, index) in PARA_S" class="has-text-right">
+                            {{ WORDS[para][sharedState.lang] }}
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+            <h3>{{ WORDS['plan list'][sharedState.lang] }}</h3>
+            <p>
+                <span v-show="sortedShips.length">
+                    {{ sortedShips.length }} {{ WORDS['found'][sharedState.lang] }}
+                    <a v-show="forceShowFlag" @click="forceShow()">
+                        {{ WORDS['limit results'][sharedState.lang] }}
+                    </a>
+                    <br>
+                </span>
+                {{ WORDS['add to dock'][sharedState.lang] }}
+            </p>
+            <table class="table is-narrow is-hoverable">
+                <thead>
+                    <tr>
+                        <th v-for="(bui, index) in BUI" class="has-text-centered">
+                            <a @click="sortTable(index)" :class="{
+                                'indicator': index === sortKey,
+                                'asc': !sortKeys[index].reverse,
+                                'dsc': sortKeys[index].reverse
+                            }">
+                                {{ WORDS[bui][sharedState.lang] }}
+                            </a>
+                        </th>
+                        <th class="has-text-right">
+                            {{ WORDS['rank'][sharedState.lang] }}
+                        </th>
+                        <th v-for="(para, index) in PARA_S" class="has-text-right">
+                            <a @click="sortTable(index + BUI.length)" :class="{
+                                'indicator': index + BUI.length === sortKey,
+                                'asc': !sortKeys[index + BUI.length].reverse,
+                                'dsc': sortKeys[index + BUI.length].reverse
+                            }">
+                                {{ WORDS[para][sharedState.lang] }}
+                            </a>
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-show="!sortedShips.length">
+                        <td colspan="10" class="has-text-centered">
+                            {{ WORDS['no results'][sharedState.lang] }}
+                        </td>
+                    </tr>
+                    <tr v-if="!forceShowFlag && sortedShips.length > maxShips">
+                        <td colspan="10" class="has-text-centered">
+                            {{ WORDS['too many results'][sharedState.lang] }}<br>
+                            <a @click="forceShow()">{{ WORDS['show all results'][sharedState.lang] }}</a>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="ship in sortedShips" @click="sendToDock(
+                        ship.body,
+                        ship.tail,
+                        ship.head,
+                        ship.bridge
+                    )">
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.body]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.tail]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.head]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-centered">
+                            {{ WORDS[KYU_S[ship.bridge]][sharedState.lang] }}
+                        </td>
+                        <td class="has-text-right">
+                            {{ ship.rank }}
+                        </td>
+                        <td v-for="param in ship.para" class="has-text-right">
+                            {{ param }}
+                        </td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th v-for="(bui, index) in BUI" class="has-text-centered">
+                            <a @click="sortTable(index)" :class="{
+                                'indicator': index === sortKey,
+                                'asc': !sortKeys[index].reverse,
+                                'dsc': sortKeys[index].reverse
+                            }">
+                                {{ WORDS[bui][sharedState.lang] }}
+                            </a>
+                        </th>
+                        <th class="has-text-right">
+                            {{ WORDS['rank'][sharedState.lang] }}
+                        </th>
+                        <th v-for="(para, index) in PARA_S" class="has-text-right">
+                            <a @click="sortTable(index + BUI.length)" :class="{
+                                'indicator': index + BUI.length === sortKey,
+                                'asc': !sortKeys[index + BUI.length].reverse,
+                                'dsc': sortKeys[index + BUI.length].reverse
+                            }">
+                                {{ WORDS[para][sharedState.lang] }}
+                            </a>
+                        </th>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <address v-once class="content has-text-centered" id="address">
+            <p>
+                <strong>{{ CONFIG.name }}</strong>
+                Ver.{{ CONFIG.ver }}
+                by <a :href="CONFIG.url">{{ CONFIG.auther }}</a>
+            </p>
+        </address>
+    </footer>
+
+    <script src="words.js"></script>
+    <script src="common.js"></script>
+    <script src="data.js"></script>
+    <script src="dock.js"></script>
+    <script src="counter.js"></script>
+    <script src="filter.js"></script>
+
+</body>
+
+</html>

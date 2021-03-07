@@ -1,0 +1,56 @@
+#dock .indicator {
+    cursor: pointer;
+    position: relative;
+}
+
+#dock .indicator::before, #dock .indicator::after {
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: 5px solid transparent;
+    right: -12px;
+    top: 50%;
+}
+
+#dock .indicator::before {
+    border-bottom-color: #aaa;
+    margin-top: -10px;
+}
+
+#dock .indicator::after {
+    border-top-color: #aaa;
+    margin-top: 2px;
+}
+
+#dock .asc::before {
+    border-bottom-color: #444;
+}
+
+#dock .dsc::after {
+    border-top-color: #444;
+}
+
+#dock input[type=checkbox] {
+    display: none;
+}
+
+#dock .checkbox {
+    padding: 3px 12px;
+}
+
+#dock .checkbox::before {
+    content: '';
+    display: block;
+    transition: opacity 0.2s;
+    width: 10px;
+    height: 15px;
+    border-right: 3px solid #53b300;
+    border-bottom: 3px solid #53b300;
+    transform: rotate(45deg);
+    opacity: 0;
+}
+
+#dock input[type=checkbox]:checked+.checkbox::before {
+    opacity: 1;
+}
