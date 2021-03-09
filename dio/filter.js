@@ -4,7 +4,7 @@ const filter = new Vue({
     data: {
         atai: [...PARA].fill(null), // フィルタの値
         memo: '', // メモ
-        maxSlot: 10, // フィルタのセーブスロット数
+        maxSlot: 8, // フィルタのセーブスロット数
         slotData: [], // スロットデータ（[{'params':[パラメータ], 'memo':メモ}]）
         saveFlag: false, // セーブ/ロードの切り替え
         sharedState: store.state, // 共用データ
