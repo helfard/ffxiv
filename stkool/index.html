@@ -5,7 +5,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=0.5">
     <link rel="stylesheet" href="../bulma.min.css">
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="common.css">
+    <link rel="stylesheet" href="panel.css">
+    <link rel="stylesheet" href="result.css">
     <script src="../vue.min.js"></script>
 </head>
 
@@ -79,8 +81,8 @@
                         </button>
                     </div>
                     <label class="label">{{ WORDS['rank'][sharedState.lang] }}
-                        <input type="range" v-model.number.lazy="rank" :min="rankMin" :max="rankMax"
-                            class="slider">
+                        <input type="range" v-model.lazy="rank"
+                            :min="rankMin" :max="rankMax" class="slider">
                         <span v-show="rank === rankMin">1-</span>{{ rank }}
                     </label>
                 </div>
@@ -94,7 +96,7 @@
                             <label v-for="(para, index) in PARA" class="label">
                                 {{ WORDS[para][sharedState.lang] }}
                                 <input type="number" min="0" max="255"
-                                    v-model.number.lazy="atai[index]" class="input">
+                                    v-model.number="atai[index]" class="input">
                             </label>
                         </div>
                         <div class="column">
@@ -158,38 +160,54 @@
             </div>
         </div>
 
-        <div class="box content" id="result" style="width: 650px;">
+        <div class="box content" id="result" style="width: 640px;">
             <h2 class="subtitle">{{ WORDS['result list'][sharedState.lang] }}</h2>
-            <p v-if="ships.length" id="clipboard">
-                {{ ships.length }} {{ WORDS['found'][sharedState.lang] }}
-                <a v-show="copyFlag && !(!forceShowFlag && ships.length > maxShips)" @click="copyShips()">
+            <p>
+                <span v-show="sortedShips.length">
+                    {{ sortedShips.length }} {{ WORDS['found'][sharedState.lang] }}
+                    <a v-show="forceShowFlag" @click="forceShow()">
+                        {{ WORDS['limit results'][sharedState.lang] }}
+                    </a>
+                </span>
+                <a v-show="copyFlag && !(!forceShowFlag && sortedShips.length > maxShips)" @click="copyShips()">
                     {{ WORDS['copy chedked submersibles'][sharedState.lang] }}
                 </a>
-                <a v-show="forceShowFlag && ships.length > maxShips" @click="forceShow()">
-                    {{ WORDS['limit results'][sharedState.lang] }}
-                </a>
             </p>
-            <p v-else>
-                {{ WORDS['no results'][sharedState.lang] }}
-            </p>
-            <p v-if="!forceShowFlag && ships.length > maxShips">
-                {{ WORDS['too many results'][sharedState.lang] }}
-                <a @click="forceShow()">{{ WORDS['show all results'][sharedState.lang] }}</a>
-            </p>
-            <table v-else v-show="ships.length" class="table is-narrow is-hoverable">
+            <table class="table is-narrow is-hoverable">
                 <thead>
                     <tr>
                         <th></th>
                         <th v-for="(bui, index) in BUI" class="has-text-centered">
-                            <a @click="sortTable(index)">{{ WORDS[bui][sharedState.lang] }}</a>
+                            <a @click="sortTable(index)" :class="[
+                                { 'indicator': index === sortKey },
+                                sortKeys[index].reverse ? 'dsc' : 'asc'
+                            ]">
+                                {{ WORDS[bui][sharedState.lang] }}
+                            </a>
                         </th>
                         <th v-for="(para, index) in PARA_S" class="has-text-centered">
-                            <a @click="sortTable(index + BUI.length)">{{ WORDS[para][sharedState.lang] }}</a>
+                            <a @click="sortTable(index + BUI.length)" :class="[
+                                { 'indicator': index + BUI.length === sortKey },
+                                sortKeys[index + BUI.length].reverse ? 'dsc' : 'asc'
+                            ]">
+                                {{ WORDS[para][sharedState.lang] }}
+                            </a>
                         </th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr v-for="ship in ships" @click="markShip(ship.id)">
+                    <tr v-show="!sortedShips.length">
+                        <td colspan="10" class="has-text-centered">
+                            {{ WORDS['no results'][sharedState.lang] }}
+                        </td>
+                    </tr>
+                    <tr v-if="!forceShowFlag && sortedShips.length > maxShips">
+                        <td colspan="10" class="has-text-centered">
+                            {{ WORDS['too many results'][sharedState.lang] }}<br>
+                            <a @click="forceShow()">{{ WORDS['show all results'][sharedState.lang] }}</a>
+                        </td>
+                    </tr>
+                    <tr v-else v-for="ship in sortedShips" @click="markShip(ship.id)">
                         <td>
                             <input type="checkbox" v-model="markedShips" :value="ship.id">
                             <label class="checkbox"></label>
@@ -215,10 +233,20 @@
                     <tr>
                         <th></th>
                         <th v-for="(bui, index) in BUI" class="has-text-centered">
-                            <a @click="sortTable(index)">{{ WORDS[bui][sharedState.lang] }}</a>
+                            <a @click="sortTable(index)" :class="[
+                                { 'indicator': index === sortKey },
+                                sortKeys[index].reverse ? 'dsc' : 'asc'
+                            ]">
+                                {{ WORDS[bui][sharedState.lang] }}
+                            </a>
                         </th>
                         <th v-for="(para, index) in PARA_S" class="has-text-centered">
-                            <a @click="sortTable(index + BUI.length)">{{ WORDS[para][sharedState.lang] }}</a>
+                            <a @click="sortTable(index + BUI.length)" :class="[
+                                { 'indicator': index + BUI.length === sortKey },
+                                sortKeys[index + BUI.length].reverse ? 'dsc' : 'asc'
+                            ]">
+                                {{ WORDS[para][sharedState.lang] }}
+                            </a>
                         </th>
                     </tr>
                 </tfoot>

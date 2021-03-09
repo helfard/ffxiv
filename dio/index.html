@@ -75,7 +75,7 @@
                             :min="rankMin" :max="rankMax" class="slider">
                         <span v-show="rank === rankMin">1-</span>{{ rank }}
                     </label>
-                    <div class="columns">
+                    <div class="columns is-mobile">
                         <div class="column">
                             <div class="buttons is-centered">
                                 <button @click="clearAll()" class="button is-warning">
@@ -250,23 +250,21 @@
                 <thead>
                     <tr>
                         <th v-for="(bui, index) in BUI" class="has-text-centered">
-                            <a @click="sortTable(index)" :class="{
-                                'indicator': index === sortKey,
-                                'asc': !sortKeys[index].reverse,
-                                'dsc': sortKeys[index].reverse
-                            }">
+                            <a @click="sortTable(index)" :class="[
+                                { 'indicator': index === sortKey },
+                                sortKeys[index].reverse ? 'dsc' : 'asc'
+                            ]">
                                 {{ WORDS[bui][sharedState.lang] }}
                             </a>
                         </th>
                         <th class="has-text-right">
                             {{ WORDS['rank'][sharedState.lang] }}
                         </th>
-                        <th v-for="(para, index) in PARA_S" class="has-text-right">
-                            <a @click="sortTable(index + BUI.length)" :class="{
-                                'indicator': index + BUI.length === sortKey,
-                                'asc': !sortKeys[index + BUI.length].reverse,
-                                'dsc': sortKeys[index + BUI.length].reverse
-                            }">
+                        <th v-for="(para, index) in PARA_S" class="has-text-centered">
+                            <a @click="sortTable(index + BUI.length)" :class="[
+                                { 'indicator': index + BUI.length === sortKey },
+                                sortKeys[index + BUI.length].reverse ? 'dsc' : 'asc'
+                            ]">
                                 {{ WORDS[para][sharedState.lang] }}
                             </a>
                         </th>
@@ -313,27 +311,24 @@
                 <tfoot>
                     <tr>
                         <th v-for="(bui, index) in BUI" class="has-text-centered">
-                            <a @click="sortTable(index)" :class="{
-                                'indicator': index === sortKey,
-                                'asc': !sortKeys[index].reverse,
-                                'dsc': sortKeys[index].reverse
-                            }">
+                            <a @click="sortTable(index)" :class="[
+                                { 'indicator': index === sortKey },
+                                sortKeys[index].reverse ? 'dsc' : 'asc'
+                            ]">
                                 {{ WORDS[bui][sharedState.lang] }}
                             </a>
                         </th>
                         <th class="has-text-right">
                             {{ WORDS['rank'][sharedState.lang] }}
                         </th>
-                        <th v-for="(para, index) in PARA_S" class="has-text-right">
-                            <a @click="sortTable(index + BUI.length)" :class="{
-                                'indicator': index + BUI.length === sortKey,
-                                'asc': !sortKeys[index + BUI.length].reverse,
-                                'dsc': sortKeys[index + BUI.length].reverse
-                            }">
+                        <th v-for="(para, index) in PARA_S" class="has-text-centered">
+                            <a @click="sortTable(index + BUI.length)" :class="[
+                                { 'indicator': index + BUI.length === sortKey },
+                                sortKeys[index + BUI.length].reverse ? 'dsc' : 'asc'
+                            ]">
                                 {{ WORDS[para][sharedState.lang] }}
                             </a>
                         </th>
-                    </tr>
                 </tfoot>
             </table>
         </div>

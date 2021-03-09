@@ -174,6 +174,7 @@ const dock = new Vue({
             let copiedLines = []; // 整形済みテキスト（配列）
             this.docks.forEach(ship => {
                 let line = WORDS[KYU_S[ship.body]][this.sharedState.lang] + WORDS[KYU_S[ship.tail]][this.sharedState.lang] + WORDS[KYU_S[ship.head]][this.sharedState.lang] + WORDS[KYU_S[ship.bridge]][this.sharedState.lang] + '/';
+                line += 'R' + this.rank + '/';
                 [...Array(PARA_S.length - 1).keys()].map(i => ++i).forEach(p => {
                     line += WORDS[PARA_S[p]][this.sharedState.lang] + ('   ' + ship.para[p]).substr(-3)
                 });

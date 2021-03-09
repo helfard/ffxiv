@@ -1,0 +1,56 @@
+#result .indicator {
+    cursor: pointer;
+    position: relative;
+}
+
+#result .indicator::before, #result .indicator::after {
+    content: "";
+    height: 0;
+    width: 0;
+    position: absolute;
+    border: 5px solid transparent;
+    right: -12px;
+    top: 50%;
+}
+
+#result .indicator::before {
+    border-bottom-color: #aaa;
+    margin-top: -10px;
+}
+
+#result .indicator::after {
+    border-top-color: #aaa;
+    margin-top: 2px;
+}
+
+#result .asc::before {
+    border-bottom-color: #444;
+}
+
+#result .dsc::after {
+    border-top-color: #444;
+}
+
+#result input[type=checkbox] {
+    display: none;
+}
+
+#result .checkbox {
+    padding: 3px 12px;
+}
+
+#result .checkbox::before {
+    content: '';
+    display: block;
+    transition: opacity 0.2s;
+    width: 10px;
+    height: 15px;
+    border-right: 3px solid #53b300;
+    border-bottom: 3px solid #53b300;
+    transform: rotate(45deg);
+    opacity: 0;
+}
+
+#result input[type=checkbox]:checked+.checkbox::before {
+    opacity: 1;
+}

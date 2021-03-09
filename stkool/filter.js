@@ -8,15 +8,20 @@ const filter = new Vue({
         slotData: [], // スロットデータ（[{'params':[パラメータ], 'memo':メモ}]）
         saveFlag: false, // セーブ/ロードの切り替え
         sharedState: store.state, // 共用データ
+        sendFlag: false // 二重送信防止用のフラグ
         // WORDS: 辞書データ
         // PARA: パラメータ
         // DEKIAI: プリセット
+    },
+    watch: {
+        atai: function () {
+            this.stackOrder();
+        }
     },
     methods: {
         clearAll: function () {
             this.atai = [...PARA].fill(null);
             this.memo = '';
-            log('Filter: ClearAll');
         },
         setTemplate: function (item, index) {
             // プリセットの適用
@@ -24,9 +29,6 @@ const filter = new Vue({
             this.memo = WORDS[item][this.sharedState.lang] + ' '
                 + WORDS[DEKIAI[item][index].name][this.sharedState.lang] + '\n'
                 + WORDS[DEKIAI[item][index].comment][this.sharedState.lang];
-            log('Filter: SetTemplate: '
-                + WORDS[item][this.sharedState.lang] + ' '
-                + WORDS[DEKIAI[item][index].name][this.sharedState.lang]);
         },
         toggleSlot: function (slot) {
             // スロットのセーブ/ロード
@@ -63,6 +65,21 @@ const filter = new Vue({
             this.saveFlag = !this.saveFlag;
             log('Filter: ChangeSaveFlagTo: ' + this.saveFlag);
         },
+        stackOrder: function () {
+            // データの二重送信を防ぐために遅延をかける
+            this.sendFlag = true;
+            setTimeout(this.sendOrder, 200);
+        },
+        sendOrder: function () {
+            if (this.sendFlag) {
+                // 結果表示
+                let ary = this.atai.map(a => a === 0 ? null : a);
+                log('Filter: SetFilter: ' + ary);
+                // 結果表示
+                result.setFilters(ary);
+                this.sendFlag = false;
+            }
+        }
     },
     mounted: function () {
         // サーチ情報がある場合はフィルタ情報をローカルストレージに保存して再読み込み
@@ -88,12 +105,5 @@ const filter = new Vue({
                 localStorage.removeItem('search');
             }
         }
-    },
-    updated: function () {
-        let ary = this.atai.map(a => a === 0 ? null : a);
-        log('Filter: SetFilter: ' + ary);
-        // 結果表示
-        result.setFilters(ary);
-        // しかしこれだとメモを弄るだけでも再描写が起こるのでは？
     }
 });

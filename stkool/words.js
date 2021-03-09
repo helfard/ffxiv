@@ -83,7 +83,7 @@ const WORDS = {
     },
 
     'rank': {
-        'ja': 'ランク',
+        'ja': 'Rank',
         'en': 'Rank',
         'zh-TW': '等級',
         'zh-CH': '等级',
@@ -155,7 +155,7 @@ const WORDS = {
         'de': '',
     },
     'confirm override': {
-        'ja': 'そのスロットには既にデータが保存されています。\n現在の値で上書きしますか？',
+        'ja': '上書きしますか？',
         'en': 'Override?',
         'zh-TW': 'Override?',
         'zh-CH': 'Override?',

@@ -5,11 +5,11 @@ const result = new Vue({
         parts: [], // 手持ちパーツのリスト
         rank: 50,
         filters: [...PARA_S].fill(null), // フィルタ設定
-        ships: [], // 組み合わせリスト
-        maxShips: 100, // 最大表示件数
+        maxShips: 200, // 最大表示件数
         forceShowFlag: false, // 最大表示件数を越えて強制的に表示するフラグ
         markedShips: [], // コピペ用チェックリスト
         copyFlag: false,
+        sortKey: 0, // 現在のソート設定
         sortKeys: [ // ソート用のキー
             { key: 'body', reverse: false },
             { key: 'tail', reverse: false },
@@ -24,6 +24,7 @@ const result = new Vue({
             { key: 'sum', reverse: true }
         ],
         sharedState: store.state, // 共用データ
+        buildFlag: false // 二重処理防止用のフラグ
         // WORDS: 辞書データ
         // BUI: 部位
         // KYU_S: 級（短縮形）
@@ -32,75 +33,67 @@ const result = new Vue({
         // SEINO: パーツ性能
         // SORT_KEYS: ソート用キーリスト
     },
-    methods: {
-        setParts: function (parts, rank) {
-            this.parts = parts;
-            this.rank = rank;
-            this.buildShips();
-        },
-        setFilters: function (filters) {
-            this.filters = filters;
-            this.buildShips();
-        },
-        buildShips: function () {
+    computed: {
+        ships: function () {
+            // 組み合わせリスト
             const B = BUI.length;
             let rankBonus = BONUS[this.rank];
             // パーツリストから全ての組み合わせを作る
-            let ships = [];
-            let ary = [...KYU_S.keys()];
+            let ships = [],
+                ary = [...KYU_S.keys()];
             ary.forEach(body => {
                 if (this.parts.includes(body * B)) ary.forEach(tail => {
                     if (this.parts.includes(tail * B + 1)) ary.forEach(head => {
                         if (this.parts.includes(head * B + 2)) ary.forEach(bridge => {
                             if (this.parts.includes(bridge * B + 3)) {
                                 let ship = {
-                                    // shipは参照渡しなので毎回初期化が必要
                                     body: body,
                                     tail: tail,
                                     head: head,
                                     bridge: bridge,
-                                    para: [],
+                                    para: PARA_S.map((p, i) => SEINO[body][0][i] + SEINO[tail][1][i] + SEINO[head][2][i] + SEINO[bridge][3][i] + rankBonus[i]),
+                                    id: '' + body + tail + head + bridge,
                                 }
-                                PARA_S.forEach((p, i) => ship.para[i] = SEINO[body][0][i] + SEINO[tail][1][i] + SEINO[head][2][i] + SEINO[bridge][3][i] + rankBonus[i]);
-                                ship.sum = ship.para.slice(1).reduce((a, b) => a + b);
-                                ship.id = '' + ship.body + ship.tail + ship.head + ship.bridge;
                                 ships.push(ship);
                             }
                         });
                     });
                 });
             });
-            // フィルタリング
-            let filteredShips = [];
+            return ships;
+        },
+        filteredShips: function () {
+            // フィルタ後の組み合わせリスト
+            let ships = this.ships,
+                filters = this.filters,
+                filteredShips = [];
             ships.forEach(ship => {
-                if ((this.filters[0] === null || ship.para[0] <= this.filters[0]) &&
-                    (this.filters[1] === null || ship.para[1] >= this.filters[1]) &&
-                    (this.filters[2] === null || ship.para[2] >= this.filters[2]) &&
-                    (this.filters[3] === null || ship.para[3] >= this.filters[3]) &&
-                    (this.filters[4] === null || ship.para[4] >= this.filters[4]) &&
-                    (this.filters[5] === null || ship.para[5] >= this.filters[5])) filteredShips.push(ship);
+                if ((filters[0] === null || ship.para[0] <= filters[0]) &&
+                    (filters[1] === null || ship.para[1] >= filters[1]) &&
+                    (filters[2] === null || ship.para[2] >= filters[2]) &&
+                    (filters[3] === null || ship.para[3] >= filters[3]) &&
+                    (filters[4] === null || ship.para[4] >= filters[4]) &&
+                    (filters[5] === null || ship.para[5] >= filters[5])) filteredShips.push(ship);
             });
             log('Result: Ships: ' + filteredShips.length + '/' + ships.length);
-            this.ships = filteredShips;
             // チェック付きはコピペ対象に入れる。
             this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id));
+            return filteredShips;
         },
-        markShip: function (key) {
-            this.markedShips.includes(key) ? this.markedShips.splice(this.markedShips.indexOf(key), 1) : this.markedShips.push(key);
-            this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id)) ? true : false;
-            log('Result: MarkedShip:' + this.markedShips);
-        },
-        sortTable: function (key) {
-            let sortKey = this.sortKeys[key].key,
-                R = this.sortKeys[key].reverse ? 1 : -1;
-            if (BUI.length <= key && key < BUI.length + PARA.length) {
-                this.ships.sort(function (a, b) {
+        sortedShips: function () {
+            // ソート済みの組み合わせリスト
+            let key = this.sortKey,
+                sortKey = this.sortKeys[key].key,
+                R = this.sortKeys[key].reverse ? 1 : -1
+                ships = this.filteredShips.slice();
+            if (BUI.length <= key && key < BUI.length + PARA_S.length) {
+                ships.sort(function (a, b) {
                     if (a.para[sortKey] < b.para[sortKey]) return R;
                     if (a.para[sortKey] > b.para[sortKey]) return R * -1;
                     return 0;
                 });
             } else {
-                this.ships.sort(function (a, b) {
+                ships.sort(function (a, b) {
                     if (a[sortKey] < b[sortKey]) return R; // クラス順
                     if (a[sortKey] > b[sortKey]) return R * -1; // クラス順
                     // if (KYU[a[KEY]] < KYU[b[KEY]]) return R; // 名前順
@@ -108,30 +101,46 @@ const result = new Vue({
                     return 0;
                 });
             }
-            this.sortKeys[key].reverse = !this.sortKeys[key].reverse;
-            log('Result: SortKey: ' + sortKey);
+            return ships;
+        }
+    },
+    methods: {
+        setParts: function (parts, rank) {
+            this.parts = parts;
+            this.rank = rank;
+        },
+        setFilters: function (filters) {
+            this.filters = filters;
+        },
+        markShip: function (key) {
+            this.markedShips.includes(key) ? this.markedShips.splice(this.markedShips.indexOf(key), 1) : this.markedShips.push(key);
+            this.copyFlag = this.ships.some(ship => this.markedShips.includes(ship.id)) ? true : false;
+        },
+        sortTable: function (key) {
+            if (this.sortKey === key) this.sortKeys[key].reverse = !this.sortKeys[key].reverse;
+            this.sortKey = key;
         },
         forceShow: function () {
             this.forceShowFlag = !this.forceShowFlag;
-            log('Result: ForceShowFlag: ' + this.forceShowFlag);
         },
         copyShips: function () {
-            const SHIPS = this.ships,
-                IDS = this.markedShips;
-            let copyShips = []; // コピペするデータ
-            let copyLines = []; // 整形済みテキスト（配列）
-            for (let ship of SHIPS)
-                if (IDS.includes(ship.id)) copyShips.push(ship);
-            for (let ship of copyShips) {
-                let txt = WORDS[KYU_S[ship.body]][this.sharedState.lang] + WORDS[KYU_S[ship.tail]][this.sharedState.lang] + WORDS[KYU_S[ship.head]][this.sharedState.lang] + WORDS[KYU_S[ship.bridge]][this.sharedState.lang] + '/';
-                for (let p in PARA_S)
-                    if (p > 0) txt += WORDS[PARA_S[p]][this.sharedState.lang] + ('   ' + ship.para[p]).substr(-3);
-                copyLines.push(txt.trim());
-            }
-            let txt = copyLines.join('\n') + '\n';
-            if (execCopy(txt)) alert(WORDS['copied'][this.sharedState.lang]);
+            let copiedShips = []; // コピペするデータ
+            let copiedLines = []; // 整形済みテキスト（配列）
+            this.ships.forEach(ship => {
+                if (this.markedShips.includes(ship.id)) copiedShips.push(ship);
+            });
+            copiedShips.forEach(ship => {
+                let line = WORDS[KYU_S[ship.body]][this.sharedState.lang] + WORDS[KYU_S[ship.tail]][this.sharedState.lang] + WORDS[KYU_S[ship.head]][this.sharedState.lang] + WORDS[KYU_S[ship.bridge]][this.sharedState.lang] + '/';
+                line += 'R' + this.rank + '/';
+                [...Array(PARA_S.length - 1).keys()].map(i => ++i).forEach(p => {
+                    line += WORDS[PARA_S[p]][this.sharedState.lang] + ('   ' + ship.para[p]).substr(-3)
+                });
+                copiedLines.push(line.trim());
+            });
+            let copiedText = copiedLines.join('\n') + '\n';
             log('Result: Clipboard:');
-            log(txt);
+            log(copiedText);
+            if (execCopy(copiedText)) alert(WORDS['copied'][this.sharedState.lang]);
         }
     },
 });

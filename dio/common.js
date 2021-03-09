@@ -1,4 +1,4 @@
-const DEBUG = true; // デバッグモード
+const DEBUG = false; // デバッグモード
 const log = msg => {
   // デバッグ用のメッセージの表示
   const SEC = new Date().getSeconds();
@@ -8,7 +8,7 @@ const log = msg => {
 const CONFIG = {
   // 基本設定
   name: 'OiTPKO',
-  ver: '5.450307',
+  ver: '5.450309',
   auther: 'Omochi Kinako (Chocobo)',
   url: 'あとでなおす',
 }
