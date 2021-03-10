@@ -1,4 +1,4 @@
-const DEBUG = false; // デバッグモード
+const DEBUG = location.hostname === 'localhost' ? true : false; // ローカル実行時はデバッグモード
 const log = msg => {
     // デバッグ用のメッセージの表示
     const SEC = new Date().getSeconds();

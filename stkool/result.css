@@ -54,3 +54,7 @@
 #result input[type=checkbox]:checked+.checkbox::before {
     opacity: 1;
 }
+
+#result tr {
+    cursor: pointer;
+}

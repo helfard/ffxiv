@@ -95,7 +95,7 @@ const dock = new Vue({
                     (filters[4] === null || ship.para[4] >= filters[4]) &&
                     (filters[5] === null || ship.para[5] >= filters[5])) filteredShips.push(ship);
             });
-            log('Dock: Ships: ' + filteredShips.length + '/' + ships.length);
+            log('Dock: Ships: ' + this.docks.length + '/' + filteredShips.length + '/' + ships.length);
             return filteredShips;
         },
         sortedShips: function () {
@@ -129,8 +129,8 @@ const dock = new Vue({
                 [ship.body, ship.tail, ship.head, ship.bridge].forEach((a, i) => {
                     partsUsed[a * BUI.length + i]++;
                 });
-            }); 
-            // ↓これ検出されるか？
+            });
+            // 使用中のパーツの数を反映
             counter.partsUsed = partsUsed;
         }
     },
