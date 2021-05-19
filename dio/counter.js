@@ -7,7 +7,7 @@ const counter = new Vue({
         partsMax: 4, // パーツ個数の最大値
         rank: '50', // ランク（Vueの仕様の都合で文字列である）
         rankMin: '50', // ランクの最小値
-        rankMax: '80', // ランクの最大値
+        rankMax: BONUS.length - 1 + '', // ランクの最大値
         sharedState: store.state, // 共用データ
         // WORDS: 辞書データ
         // BUI: 部位

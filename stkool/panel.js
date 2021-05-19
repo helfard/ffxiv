@@ -5,7 +5,7 @@ const panel = new Vue({
         checkedButtons: [...Array(18).keys(), 18, 19], // チェックされたボタン
         rank: '50', // ランク（Vueの仕様の都合で文字列である）
         rankMin: '50', // ランクの最小値
-        rankMax: '80', // ランクの最大値
+        rankMax: BONUS.length - 1 + '', // ランクの最大値
         sharedState: store.state, // 共用データ
         sendFlag: false // 二重送信防止用のフラグ
         // WORDS: 辞書データ
