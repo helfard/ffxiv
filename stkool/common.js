@@ -8,7 +8,7 @@ const log = msg => {
 const CONFIG = {
     // 基本設定
     name: 'Submersible Maker',
-    ver: '5.550608',
+    ver: '5.550709',
     auther: 'Omochi Kinako (Chocobo)',
     url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
 }
