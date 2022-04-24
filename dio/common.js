@@ -8,7 +8,7 @@ const log = msg => {
 const CONFIG = {
   // 基本設定
   name: 'OiTPKO',
-  ver: '5.550709',
+  ver: '6.100424',
   auther: 'Omochi Kinako (Chocobo)',
   url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4691689/',
 }
