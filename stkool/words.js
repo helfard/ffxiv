@@ -533,7 +533,7 @@ const WORDS = {
     },
     'syl': {
         'ja': 'シル',
-        'en': 'S',
+        'en': 'Y',
         'zh-TW': '希',
         'zh-CH': '希',
         'ko': '실드',
@@ -578,7 +578,7 @@ const WORDS = {
     },
     'm-syl': {
         'ja': 'ｼﾙ改',
-        'en': 'S+',
+        'en': 'Y+',
         'zh-TW': '希改',
         'zh-CH': '希改',
         'ko': '신실드',
@@ -770,7 +770,7 @@ const WORDS = {
     },
     'ashsea acil': {
         'ja': '灰海 A→C→I→L',
-        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Central Charnel Trench\n-> The Lone Glove',
+        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Central Charnel Trench\n-> The Midden Pit',
         'zh-TW': '灰海 A→C→I→L',
         'zh-CH': '灰海 A→C→I→L',
         'ko': '잿빛 바다:\n조조난 섬 남단\n-> 조조난 섬 북단\n-> 화장로 해구 중턱\n-> 짝짝이 장갑 섬',
@@ -779,7 +779,7 @@ const WORDS = {
     },
     'ashsea acmil': {
         'ja': '灰海 A→C→M→I→L',
-        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Midden Pit\n-> The Central Charnel Trench\n-> The Lone Glove',
+        'en': 'Sea of Ash:\nSouth Isle of Zozonan\n-> North Isle of Zozonan\n-> The Lone Glove\n-> The Central Charnel Trench\n-> The Midden Pit',
         'zh-TW': '灰海 A→C→M→I→L',
         'zh-CH': '灰海 A→C→M→I→L',
         'ko': '잿빛 바다:\n조조난 섬 남단\n-> 조조난 섬 북단\n-> 자갈 해분\n-> 화장로 해구 중턱\n-> 짝짝이 장갑 섬',
