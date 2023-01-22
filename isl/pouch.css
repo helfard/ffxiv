@@ -1,0 +1,48 @@
+#pouch th {
+    width: 100px;
+}
+#pouch input[type=checkbox] {
+    display: none;
+}
+
+#pouch .checkbox {
+    padding: 3px 3px;
+    color: #ccc;
+    position: relative;
+}
+#pouch input[type=checkbox]:checked + .checkbox {
+    font-weight: bold;
+    color: #000;
+}
+#pouch .checkedbox {
+    padding: 3px 3px;
+    color: #ccc;
+    position: relative;
+}
+#pouch .computed {
+    font-weight: bold;
+    color: #000;
+}
+#pouch input[type=checkbox]:checked + .checkedbox {
+    font-weight: bold;
+    color: #00f;
+}
+
+#pouch input[type=range].slider {
+    width: 355px;
+    height: 12px;
+}
+
+#pouch .icon {
+    position: absolute;
+    top: 5px;
+    right: -10px;
+    margin: 0px;
+    padding: 0px;
+    font-size: small;
+    color: #f00;
+    text-shadow: 1px 1px 0 #fff, -1px -1px 0 #fff, -1px 1px 0 #fff, 1px -1px 0 #fff;
+}
+#pouch .hidden {
+    display: none;
+}

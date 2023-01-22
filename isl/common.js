@@ -1,16 +1,16 @@
 const DEBUG = location.hostname === 'localhost' ? true : false; // ローカル実行時はデバッグモード
 const log = msg => {
     // デバッグ用のメッセージの表示
-    const SEC = new Date().getSeconds();
-    if (DEBUG) console.log(SEC + ' ' + msg);
+    const TIME = new Date().getSeconds();
+    if (DEBUG) console.log(TIME + ' ' + msg);
 };
 
-const CONFIG = {
+const INFO = {
     // 基本設定
-    name: 'Submersible Maker',
-    ver: '6.300122',
+    name: 'Banishment!?',
+    ver: '6.200904',
     auther: 'Omochi Kinako (Chocobo)',
-    url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4205382/',
+    url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/',
 }
 
 const store = {
@@ -31,22 +31,23 @@ const language = new Vue({
     el: '#language',
     data: {
         currentLang: 'ja', // 言語設定（共用データとは別に保持した方が監視上の都合が良い）
-        // LANGS: 言語リスト
+        LANG: LANG, // 言語リスト
+        WORD: WORD, // 辞書
     },
     methods: {
         setLanguage: function (lang) {
             this.currentLang = lang;
             // ローカルストレージに言語設定を保存
             localStorage.setItem('language', lang);
-            store.setLanguage(lang); // 言語設定を変更
+            store.setLanguage(lang); // グローバルの言語設定を変更
         }
     },
     mounted: function () {
         // ローカルストレージから言語設定を所得
         let lang = localStorage.getItem('language');
         if (lang) {
-            this.currentLang = lang; // 言語設定を変更
-            store.setLanguage(lang); // 言語設定を変更
+            this.currentLang = lang; // ローカルの言語設定を変更
+            store.setLanguage(lang); // グローバルの言語設定を変更
         }
     },
 });
@@ -55,14 +56,14 @@ const header = new Vue({
     // ヘッダー
     el: '#title',
     data: {
-        sharedState: store.state, // 共用データ
-        // WORDS: 辞書データ
-        // CONFIG: 基本設定
+        WORD: WORD, // 辞書データ
+        INFO: INFO, // 基本設定
+        sharedState: store.state, // 共用データ（言語設定を含む）
     },
     methods: {
         setTitle: function () {
             // タイトルをセット
-            let title = WORDS['title'][this.sharedState.lang];
+            let title = WORD['title'][this.sharedState.lang];
             document.title = title;
             log('Header: SetTitle: ' + title);
         },
@@ -79,23 +80,23 @@ const address = new Vue({
     // フッター
     el: '#address',
     data: {
-        storageVersion: '1', // ローカルストレージの保存形式の版
-        // INFO: 基本設定
+        INFO: INFO, // 基本設定
+        storageVersion: '2', // ローカルストレージの保存形式の版
     },
     methods: {
-        checkLocalstorageVersion: function () {
-            // ローカルストレージの形式の版が異なる場合は一度全て削除する
+        checkLocalStorageVersion: function () {
+            // ローカルストレージの保存形式の版が異なる場合は一度全て削除する
             let currentVersion = this.storageVersion;
             let savedVersion = localStorage.getItem('storageVersion');
             if (currentVersion !== savedVersion) {
                 localStorage.clear();
                 localStorage.setItem('storageVersion', currentVersion);
-                log('Footer: LocalStorage(Clear)');
+                log('Footer: Cleard LocalStorage.');
             }
         }
     },
     mounted: function () {
-        this.checkLocalstorageVersion();
+        this.checkLocalStorageVersion();
     }
 });
 

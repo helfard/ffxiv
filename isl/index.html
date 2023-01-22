@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=0.5">
+    <link rel="stylesheet" href="../bulma.min.css">
+    <link rel="stylesheet" href="pouch.css">
+    <link rel="stylesheet" href="plan.css">
+    <script src="../vue.js"></script>
+</head>
+
+<body>
+    <header class="hero is-primary is-bold">
+        <div class="hero-body">
+            <h1 class="title container" id="title">{{ WORD['title'][sharedState.lang] }}</h1>
+        </div>
+    </header>
+
+    <section class="container" id="language">
+        <div class="buttons has-addons">
+            <button class="button is-small" v-for="lang in LANG" :lang="lang.id"
+                :class="{ 'is-warning is-info': lang.id === currentLang }"
+                @click="setLanguage(lang.id)">
+                {{ lang.name }}
+            </button>
+        </div>
+    </section>
+
+    <section class="section container">
+        <div class="box content field" id="pouch">
+            <h2 class="subtitle">{{ WORD['開拓ポーチ'][sharedState.lang] }}</h2>
+            <details open>
+                <summary>
+                </summary>
+
+                <label class="label">{{ WORD['開拓ランク'][sharedState.lang] }}
+                    <input type="range" v-model.lazy="rank"
+                        :min="rankMin" :max="rankMax" class="slider">
+                    <span v-show="rank === rankMin">1-</span>{{ rank }}
+                </label>
+
+                <table class="table is-hoverable">
+                    <tbody>
+                        <tr>
+                            <th class="has-text-centered">
+                                <a @click="checkAll('開拓素材');">
+                                    {{ WORD['開拓素材'][sharedState.lang] }}
+                                </a>
+                            </th>
+                            <td>
+                                <label v-for="sozai in field">
+                                    <input type="checkbox" v-model="checkedField" :value="sozai">
+                                    <span class="checkbox">
+                                        {{ WORD[FIELD[sozai].shorten][sharedState.lang] }}
+                                    </span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="has-text-centered">
+                                <a @click="checkAll('耕作物資');">
+                                    {{ WORD['耕作物資'][sharedState.lang] }}
+                                </a>
+                            </th>
+                            <td>
+                                <label v-for="sozai in cropland">
+                                    <input type="checkbox" v-model="checkedCropland" :value="sozai">
+                                    <span class="checkbox">
+                                        {{ WORD[CROPLAND[sozai].shorten][sharedState.lang] }}
+                                    </span>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="has-text-centered">
+                                <a @click="checkAll('飼育動物');">
+                                    {{ WORD['飼育動物'][sharedState.lang] }}
+                                </a>
+                            </th>
+                            <td>
+                                <label v-for="animal in livestock">
+                                    <input type="checkbox" disabled v-model="checkedLivestock" :value="animal">
+                                    <a class="checkbox" @click="checkAnimal(animal)">
+                                        {{ WORD[animal][sharedState.lang] }}
+                                    <span class="icon" :class="feededLivestock.includes(animal) ? '' : 'hidden'">🍎</span>
+                                    </a>
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th class="has-text-centered">
+                                <a @click="checkAll('畜産物資');">
+                                    {{ WORD['畜産物資'][sharedState.lang] }}
+                                </a>
+                            </th>
+                            <td>
+                                <label v-for="sozai in pasture">
+                                    <input type="checkbox" v-model="checkedPasture" :value="sozai">
+                                    <span :class="computedPasture.includes(sozai) ? 'computed' : ''" class="checkedbox">
+                                        {{ WORD[PASTURE[sozai].shorten][sharedState.lang] }}
+                                    </span>
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </details>
+        </div>
+
+        <div class="box content field" id="plan">
+            <h2 class="subtitle">{{ WORD['生産計画'][sharedState.lang] }}</h2>
+            <details open>
+                <summary>
+                </summary>
+
+                <template v-for="item in tosanhin">
+                    <input type="checkbox" v-model="checkedTosanhin" :value="item">
+                    <span :class="zyogaiTosanhin.includes(item)? 'zyogai' : 'checkbox'" @click="checkTosanhin(item)">
+                        {{ WORD[TOSANHIN[item].shorten][sharedState.lang] }}
+                    </span>
+                </template>
+                <table class="table is-hoverable">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th class="has-text-centered">4{{ WORD['時間'][sharedState.lang] }}</th>
+                            <th class="has-text-centered">6{{ WORD['時間'][sharedState.lang] }}</th>
+                            <th class="has-text-centered">8{{ WORD['時間'][sharedState.lang] }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr v-for="(ary, tokusei) in TABLE_TOSANHIN">
+                            <th class="has-text-centered">
+                                {{ tokusei }}
+                            </th>
+                            <td v-for="items in ary">
+                                <template v-for="item in items">
+                                    <template v-if="tosanhin.includes(item)">
+                                        <input type="checkbox" v-model="checkedTosanhin" :value="item">
+                                        <span :class="zyogaiTosanhin.includes(item)? 'zyogai' : 'checkbox'" @click="checkTosanhin(item)">
+                                            {{ WORD[TOSANHIN[item].shorten][sharedState.lang] }}
+                                        </span><br>
+                                    </template>
+                                </template>
+                            </td>
+                        </tr>
+                    </tbody>
+                    <tfoot>
+                    </tfoot>
+                </table>
+
+                <hr>
+                {{ checkedTosanhin }}
+                <hr>
+                {{ zyogaiTosanhin }}
+                <hr>
+                {{ tosanhin }}
+
+            </details>
+        </div>
+
+
+
+
+
+    </section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <footer class="footer">
+        <address v-once class="content has-text-centered" id="address">
+            <p>
+                <strong>{{ INFO.name }}</strong>
+                Ver.{{ INFO.ver }}
+                by <a :href="INFO.url">{{ INFO.auther }}</a>
+            </p>
+        </address>
+    </footer>
+
+    <script src="lang.js"></script>
+    <script src="common.js"></script>
+    <script src="data.js"></script>
+    <script src="plan.js"></script>
+    <script src="pouch.js"></script>
+
+</body>
+
+</html>
