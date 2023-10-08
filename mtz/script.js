@@ -1,6 +1,6 @@
 'use strict'
 
-const DEBUG = false // デバッグモード
+const DEBUG = location.hostname === 'localhost' ? true : false; // ローカル実行時はデバッグモード
 const DEF_PANEL = [] // デフォルトパネル
 
 // KYU 級の名前
@@ -27,7 +27,6 @@ const panel = new Vue({
       let ary = this.formData.slice()
       let ary2 = ary.map(v => (v < 4 ? ++v : 0))
       this.formData = ary2
-      log(ary2)
     },
     checkLine: function (line) {
       const NUM = this.bui.length,
@@ -40,8 +39,27 @@ const panel = new Vue({
       }
       this.formData = ary
     },
+    clearAll: function () {
+      let ary = this.formData.slice()
+      let ary2 = ary.fill(0)
+      this.formData = ary2
+    },
+    getLocalStorage: function () {
+      // ローカルストレージからデータを所得
+      let panel = localStorage.getItem('panel');
+      if (panel) {
+          this.formData = JSON.parse(panel);
+      }
+    },
+    setLocalStorage: function () {
+      // ローカルストレージにデータを保存
+      let panel = this.formData;
+      localStorage.setItem('panel', JSON.stringify(panel));
+    },
   },
-  mounted: function () { },
+  mounted: function () {
+    this.getLocalStorage(); // ローカルストレージからデータを所得
+  },
   updated: function () {
     let ary = this.formData.slice()
     let ary2 = []
@@ -55,6 +73,7 @@ const panel = new Vue({
     log(ary2)
     log('Panels:')
     log(ary2)
+    this.setLocalStorage(); // ローカルストレージにデータを保存
     sozai.makeTree(ary2)
   },
 })
@@ -72,7 +91,7 @@ const sozai = new Vue({
     lastSozai: [],
     firstSozai: [],
     midSozai: [{}],
-    sortKey: 0, // ソート
+    sortKey: 'name', // ソート順（name: 名前順、volume: 個数順）
     totalSozai: {}, // トータル素材リスト
   },
   methods: {
@@ -142,27 +161,38 @@ const sozai = new Vue({
       this.firstSozai = firstSozai
       this.totalSozai = totalSozai
       this.sortKeys(this.sortKey)
+      log('TotalSozai:')
+      log(totalSozai)
+      checker.setupList(totalSozai)
     },
-    sortKeys: function (key) {
-      let firstSozai = this.firstSozai.slice(),
-        totalSozai = this.totalSozai
+    sortKeys: function () {
+      let sortKey = this.sortKey; // ソート順（name: 名前順、volume: 個数順）
+      let firstSozai = this.firstSozai.slice();
       const S = this.midSozai.slice(-1)[0]
-      if (key) {
-        // 個数でソート
-        firstSozai.sort((a, b) => S[b] - S[a])
-      } else {
+      if (sortKey === 'name') {
         // 名前でソート
         firstSozai.sort()
+      } else {
+        // 個数でソート
+        firstSozai.sort((a, b) => S[b] - S[a])
       }
       log('FirstSozai:')
       log(firstSozai)
       log('SortKey:')
-      log(key)
-      this.firstSozai = firstSozai
-      this.sortKey = key
-      log('TotalSozai:')
-      log(totalSozai)
-      checker.setupList(totalSozai)
+      log(sortKey)
+      this.firstSozai = firstSozai  
+    },
+    getLocalStorage: function () {
+      // ローカルストレージからデータを所得
+      let sortKey = localStorage.getItem('listSortKey');
+      if (sortKey) {
+          this.sortKey = JSON.parse(sortKey);
+      }
+    },
+    setLocalStorage: function () {
+      // ローカルストレージにデータを保存
+      let sortKey = this.sortKey;
+      localStorage.setItem('listSortKey', JSON.stringify(sortKey));
     },
     copyTxt: function () {
       const S = this.firstSozai.slice()
@@ -172,41 +202,69 @@ const sozai = new Vue({
       if (execCopy(txt)) alert('コピーしました！')
     },
   },
+  watch: {
+    sortKey() {
+      this.sortKeys();
+    },
+  },
+  mounted: function () {
+    this.getLocalStorage();
+  },
+  updated: function () {
+    this.setLocalStorage();
+  },
 })
+
+// 更新があるのは以下のタイミング
+// リロードしてローカルストレージを読み込んだ場合
+// パーツ一覧に操作があった場合
+
 const checker = new Vue({
   // 収集チェッカー
   el: '#checker',
   data: {
+    debug: DEBUG, // デバッグモード
     materials: MATERIALS,
     listSozai: {},
     keysSozai: [],
-    showMode: 2, // 表示モード（0:一次素材のみ, 1:直接入手手段がある素材, 2:全て）
-    sortKey: 0,
+    showMode: 1, // 表示モード（0:一次素材のみ, 1:直接入手手段がある素材, 2:全て）
+    sortKey: 'name',
     howto: HOWTO, // 素材の入手法
+    formValues: {}, // 現物の数
+  },
+  watch: {
   },
   methods: {
+    shortName: function (name) {
+      return shortenString(name);
+    },
     setupList: function (totalSozai) {
       const M = this.materials
       // リストのセットアップ
       let listSozai = {}
+      let formValues = {}
       for (let key of Object.keys(totalSozai)) {
         listSozai[key] = {
           required: totalSozai[key], // 必要数
-          formValue: null, // 現物の数
           realValue: 0, // 現物や上位素材から換算した数
           checked: false, // 足りてるボタン
           flag: false, // 足りてるフラグ
-        }
+        },
+        formValues[key] = null; // 現物の数
       }
+      this.listSozai = listSozai
+      this.getLocalStorage();
+      this.sortKeys(this.sortKey)
+      this.checkZaiko();
+      log('KeysSozai:')
+      log(this.keysSozai)
       log('ListSozai:')
       log(listSozai)
-      this.listSozai = listSozai
-      this.sortKeys(this.sortKey)
     },
     sortKeys: function (key) {
       let listSozai = this.listSozai
       let keysSozai = Object.keys(listSozai)
-      if (key) {
+      if (key === 'volume') {
         // 個数でソート
         keysSozai.sort((a, b) => listSozai[b].required - listSozai[a].required)
       } else {
@@ -217,7 +275,6 @@ const checker = new Vue({
       log(keysSozai)
       log('SortKey:')
       log(key)
-      this.listSozai = listSozai
       this.keysSozai = keysSozai
       this.sortKey = key
     },
@@ -225,24 +282,25 @@ const checker = new Vue({
       const M = this.materials
       let listSozai = this.listSozai
       let keysSozai = this.keysSozai
+      let formValues = this.formValues
       // 実質数のチェック
       let prevZaiko = {},
         nextZaiko = {}
       for (let key of keysSozai) {
         let n = 0
-        if (listSozai[key].formValue) {
-          if (listSozai[key].formValue >= listSozai[key].required) {
+        if (listSozai[key]) {
+          if (formValues[key] >= listSozai[key].required) {
             n = listSozai[key].required
-          } else if (listSozai[key].formValue > 0) {
-            n = listSozai[key].formValue
+          } else if (formValues[key] > 0) {
+            n = formValues[key]
           }
         }
         prevZaiko[key] = n
       }
       for (let i = 0; i < 10; i++) {
         for (let key of keysSozai)
-          nextZaiko[key] = listSozai[key].formValue
-            ? listSozai[key].formValue
+          nextZaiko[key] = (formValues[key])
+            ? formValues[key]
             : 0 // 初期値
         for (let sozai of keysSozai) {
           if (M[sozai]) {
@@ -253,7 +311,7 @@ const checker = new Vue({
               nextZaiko[s] += add // 次世代の在庫をセット
             }
           }
-        }
+        }  
         for (let key of keysSozai) {
           if (nextZaiko[key] >= listSozai[key].required) {
             nextZaiko[key] = listSozai[key].required
@@ -266,53 +324,91 @@ const checker = new Vue({
         prevZaiko = Object.assign({}, nextZaiko)
       }
       for (let key of keysSozai) listSozai[key].realValue = prevZaiko[key]
-      // 足りてるかチェック
-      for (let i = 0; i < 10; i++) {
-        let flag = true
-        for (let key of keysSozai) {
-          if (listSozai[key].flag) continue
-          if (M[key]) {
-            let f = true
-            for (let s of Object.keys(M[key])) {
-              if (s === 'num') continue
-              if (!listSozai[s].flag) f = false
-            }
-            if (f) (listSozai[key].flag = true), (flag = false)
-          }
-        }
-        //        if (flag) break;
-      }
+      this.checkFlags();
       this.listSozai = Object.assign({}, listSozai)
     },
     fillForm: function (key) {
-      this.listSozai[key].formValue =
-        this.listSozai[key].formValue === this.listSozai[key].required - 0
-          ? null
-          : this.listSozai[key].required
-      this.checkZaiko()
+      
+      log('ここから');
+      log(this.formValues);
+      log('ここまで');
+
+      this.formValues[key] =
+        this.formValues[key] === this.listSozai[key].required - 0
+        ? null : this.listSozai[key].required
+  
+        this.checkZaiko()
     },
-    showHowTo: function (item) {
+    checkFlags: function () {
+      // 足りてるかチェック
+      let listSozai = this.listSozai;
+      for (let sozai of Object.keys(listSozai)) {
+        if (listSozai[sozai].realValue && listSozai[sozai].realValue >= listSozai[sozai].required) {
+          listSozai[sozai].flag = true;
+        } else {
+          listSozai[sozai].flag = false;
+        }
+      }
+      this.listSozai = Object.assign({}, listSozai);
+      this.setLocalStorage();
+    },
+    clearValue: function () {
+      // 所持数をリセット
+      this.formValues = {};
+      this.checkZaiko();
+    },
+    showMemo: function (item) {
       const howto = this.howto
-      if (howto[item]) alert(item + ':\n ' + howto[item].join('\n '))
-      log('HowTo: ' + item)
+      if (howto[item]) alert(item + ':\n ' + howto[item]['メモ'])
+      log('Memo: ' + item)
+    },
+    getLocalStorage: function () {
+      // ローカルストレージからデータを所得
+      let showMode = localStorage.getItem('checkerShowMode');
+      if (showMode) {
+          this.showMode = JSON.parse(showMode);
+      }
+      let jsonFormValues = localStorage.getItem('checkerFormValues');
+      if (jsonFormValues) {
+        let parsedFormValues = JSON.parse(jsonFormValues);
+        let formValues = {};
+        let keys = Object.keys(parsedFormValues);
+        Object.keys(parsedFormValues).forEach(key => {
+          formValues[key] = parsedFormValues[key];
+        });
+        this.formValues = Object.assign({}, formValues);
+        //        this.listSozai = Object.assign({}, this.listSozai, tmp);
+//        let keys = Object.keys(parsedFormValues);
+
+        //        let listSozai = Object.assign({}, this.listSozai, parsedFormValues);
+//        for (let i = 0; i < keys.length; i++) {
+//          this.$set(this.listSozai[keys[i]], 'formValue', parsedFormValues[keys[i]]);
+//        }
+//        Object.keys(parsedFormValues).forEach(key => this.$set(this.listSozai[key], 'formValue', parsedFormValues[key]));
+      }
+      let sortKey = localStorage.getItem('checkerSortKey');
+      if (sortKey) {
+          this.sortKey = JSON.parse(sortKey);
+      }
+    },
+    setLocalStorage: function () {
+      // ローカルストレージにデータを保存
+      let showMode = this.showMode;
+      localStorage.setItem('checkerShowMode', JSON.stringify(showMode));
+      let listSozai = this.listSozai;
+      let formValues = {}; // { key: 名前, value: 数 }
+      Object.keys(this.formValues).forEach(key => {
+        if (this.formValues[key]) {
+          formValues[key] = this.formValues[key];
+        }
+      });
+      localStorage.setItem('checkerFormValues', JSON.stringify(formValues));
+      let sortKey = this.sortKey;
+      localStorage.setItem('checkerSortKey', JSON.stringify(sortKey));
     },
   },
+  mounted: function () {
+  },
+  updated: function () {
+  },
 })
-
-const execCopy = string => {
-  // 任意の文字列ををクリップボードにコピー
-  // https://qiita.com/simiraaaa/items/2e7478d72f365aa48356 からパクった
-  var tmp = document.createElement('div')
-  var pre = document.createElement('pre')
-  pre.style.webkitUserSelect = 'auto'
-  pre.style.userSelect = 'auto'
-  tmp.appendChild(pre).textContent = string
-  var s = tmp.style
-  s.position = 'fixed'
-  s.right = '200%'
-  document.body.appendChild(tmp)
-  document.getSelection().selectAllChildren(tmp)
-  var result = document.execCommand('copy')
-  document.body.removeChild(tmp)
-  return result
-}

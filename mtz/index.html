@@ -5,8 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="../bulma.min.css">
+    <!--Blumaはツールチップと競合するので小細工が必要-->
     <link rel="stylesheet" href="style.css">
     <script src="../vue.min.js"></script>
+    <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
 </head>
 
 <body>
@@ -20,15 +22,13 @@
     <section class="section">
         <div class="container">
             <div class="columns">
-                <div class="column is-narrow" style="width: 550px;">
+                <div class="column is-narrow">
                     <div class="box content" id="panel">
                         <h2 class="subtitle">パーツ</h2>
-                        <table class="table is-hoverable">
+                        <table class="table is-narrow is-hoverable">
                             <thead>
                                 <tr>
-                                    <th class="has-text-centered">
-                                        <a @click="checkAll()">級</a>
-                                    </th>
+                                    <th class="has-text-centered">級</th>
                                     <th class="has-text-centered" v-for="(b, i) in bui">
                                         {{ b }}
                                     </th>
@@ -48,32 +48,41 @@
                             </tbody>
                             <tfoot>
                                 <tr>
-                                    <th class="has-text-centered">
-                                        <a @click="checkAll()">級</a>
-                                    </th>
+                                    <th class="has-text-centered">級</th>
                                     <th class="has-text-centered" v-for="b in bui">{{ b }}</th>
                                 </tr>
                             </tfoot>
                         </table>
+                        <div class="has-text-centered">
+                            <button class="button" @click="checkAll()">全部</button>
+                            <button class="button is-warning" @click="clearAll()">リセット</button>
+                        </div>
                     </div>
                 </div>
-                <div class="column is-narrow" style="width: 400px;">
+                <div class="column is-narrow">
                     <div class="box content" id="sozai" v-show="firstSozai.length">
                         <h2 class="subtitle">素材一覧</h2>
-                        <p v-if="lastSozai.length < 5">
-                            {{ lastSozai.join('・')
-                }}を作るために必要な素材は以下の通りです。
-                        </p>
-                        <p v-else>
-                            {{ lastSozai[0] }}・{{ lastSozai[1] }}・{{ lastSozai[2] }}・{{
-                lastSozai[3] }}ほかを作るために必要な素材は以下の通りです。
+                        <template v-if="lastSozai.length < 5">
+                            <ul v-for="sozai in lastSozai">
+                                <li>{{ sozai }}</li>
+                            </ul>
+                        </template>
+                        <template v-else>
+                            <ul>
+                                <li>{{ lastSozai[0] }}</li>
+                                <li>{{ lastSozai[1] }}</li>
+                                <li>{{ lastSozai[2] }}</li>
+                                <li>{{ lastSozai[3] }}</li>
+                                <li>（以下略）</li>
+                            </ul>
+                        </template>
+                        <p>
+                        を作るために必要な素材は以下の通りです。
                         </p>
                         <div class="field control">
-                            <label class="radio"><input type="radio" name="sort" @click="sortKeys(0)"
-                                    checked="chedked" />適当順</label>
-                            <label class="radio"><input type="radio" name="sort"
-                                    @click="sortKeys(1)" />個数順</label><br />
-                            <a @click="copyTxt()" class="">リストをコピーする。</a>
+                            <label class="radio"><input type="radio" v-model="sortKey" value="name" checked="chedked" />適当順</label>
+                            <label class="radio"><input type="radio" v-model="sortKey" value="volume" />個数順</label>
+                            <a @click="copyTxt()" class="">　リストをコピー</a>
                             <ul style="overflow: auto; height: 450px;">
                                 <li v-for="sozai in firstSozai">
                                     {{ sozai }} が {{ midSozai[midSozai.length - 1][sozai]}}個
@@ -83,55 +92,95 @@
                     </div>
                 </div>
             </div>
-            <div class="box content" style="width: 650px;" id="checker" v-show="Object.keys(listSozai).length">
-                <h2 class="subtitle">収集チェッカー</h2>
-                <p>
-                    素材の個数を入力することで中間素材も含めた過不足を計算します。<br />（素材名か必要数をクリックすると十分数を入力したことにできます）
-                </p>
-                <div class="field control">
-                    <label class="radio"><input type="radio" v-model.number="showMode" value="2" />一次素材のみ</label>
-                    <label class="radio"><input type="radio" v-model.number="showMode"
-                            value="1" />直接入手手段がある一次素材と中間素材</label>
-                    <label class="radio"><input type="radio" v-model.number="showMode" value="0" />あらゆる素材</label>
+            <div class="columns">
+                <div class="column is-narrow">
+                    <div class="box content" id="checker" v-show="Object.keys(listSozai).length">
+                    <h2 class="subtitle">収集チェッカー</h2>
+                    <p>
+                        素材の個数を入力することで中間素材も含めた過不足を計算します。<br />（素材名か必要数をクリックすると十分数を入力したことにできます）
+                    </p>
+                    <div class="field control">
+                        <label class="radio"><input type="radio" v-model.number="showMode" value="0" />一次素材</label>
+                        <label class="radio"><input type="radio" v-model.number="showMode"
+                                value="1" />直接入手可能な一次素材と中間素材*</label>
+                        <label class="radio"><input type="radio" v-model.number="showMode" value="2" />全素材（一次＋中間*）</label>
+                    </div>
+                    <div  class="has-text-right">
+                        <button class="button is-warning" @click="clearValue()">所持数をクリア</button>
+                    </div>
+                    <table class="table is-hoverable field">
+                        <thead>
+                            <tr>
+                                <th class="has-text-centered">
+                                    <a @click="sortKeys('name')">素材名</a>
+                                </th>
+                                <th class="has-text-centered">入手法</th>
+                                <!-- ↓はスマホでは表示しない -->
+                                <th class="is-hidden-mobile">公式情報</th>
+                                <!-- ↑はスマホでは表示しない -->
+                                <th class="has-text-centered">所持数</th>
+                                <th class="has-text-right">実質数</th>
+                                <th class="has-text-right">
+                                    <a @click="sortKeys('volume')">必要数</a>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody class="table is-narrow is-hoverable">
+                            <tr v-for="(key, i) in keysSozai" v-show="listSozai[key].required
+                                &&((showMode === 2)
+                                ||(showMode === 1 && howto[key]['メモ'])
+                                ||(showMode === 0 && sozai.firstSozai.includes(key)))
+                                ">
+                                <td>
+                                    <span v-show="debug">
+                                        <!-- 作業用、本番では表示しない -->
+                                        <a :href="'./link.php?q=' + encodeURI(key)" target="_blank">■ </a>
+                                    </span>
+                                    <a @click="fillForm(key)">
+                                        <span class="is-hidden-mobile">{{ key }}</span>
+                                        <span class="is-hidden-tablet">{{ shortName(key) }}</span>
+                                    </a>
+                                    <span v-show="materials[key]">*</span>
+                                </td>
+                                <td class="has-text-centered">
+                                    <a v-show="howto[key]['メモ']" @click="showMemo(key)">💬</a>
+                                </td>
+                                <td class="is-hidden-mobile">
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/item/' + howto[key]['情報']" target="_blank" class="eorzeadb_link" v-show="howto[key]['情報']">情報</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/gathering/' + howto[key]['採掘']" target="_blank" class="eorzeadb_link" v-show="howto[key]['採掘']">採掘</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/gathering/' + howto[key]['砕岩']" target="_blank" class="eorzeadb_link" v-show="howto[key]['砕岩']">砕岩</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/gathering/' + howto[key]['伐採']" target="_blank" class="eorzeadb_link" v-show="howto[key]['伐採']">伐採</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/gathering/' + howto[key]['草刈']" target="_blank" class="eorzeadb_link" v-show="howto[key]['草刈']">草刈</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['木工師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['木工師']">木工</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['鍛冶師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['鍛冶師']">鍛冶</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['甲冑師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['甲冑師']">甲冑</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['彫金師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['彫金師']">彫金</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['革細工師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['革細工師']">革細工</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['裁縫師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['裁縫師']">裁縫</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['錬金術師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['錬金術師']">錬金</a>
+                                    <a :href="'https://jp.finalfantasyxiv.com/lodestone/playguide/db/recipe/' + howto[key]['調理師']" target="_blank" class="eorzeadb_link" v-show="howto[key]['調理師']">調理</a>
+                                </td>
+
+                                <td class="has-text-centered">
+                                    <input size="4" v-model.number="formValues[key]" @input="checkZaiko()"
+                                        class="has-text-right" />
+                                </td>
+                                <td class="has-text-right">
+                                    <span v-show="listSozai[key].realValue >= listSozai[key].required" class="checked"></span>
+                                    <span v-show="listSozai[key].realValue < listSozai[key].required">{{ listSozai[key].realValue }}</span>
+                                </td>
+                                <td class="has-text-right">
+                                    <a @click="fillForm(key)">{{ listSozai[key].required }}</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                        <tfoot></tfoot>
+                    </table>
+                    </div>
                 </div>
-                <table class="table is-hoverable field">
-                    <thead>
-                        <tr>
-                            <th class="has-text-centered">
-                                <a @click="sortKeys(0)">素材名</a>
-                            </th>
-                            <th class="has-text-centered">所持数</th>
-                            <th class="has-text-centered">（実質数）</th>
-                            <th class="has-text-centered">
-                                <a @click="sortKeys(1)">必要数</a>
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody class="">
-                        <tr v-for="(key, i) in keysSozai" v-show="
-            (showMode === 0)||
-            (showMode === 1 && howto[key])||
-            (showMode === 2 && sozai.firstSozai.includes(key))
-            ">
-                            <td>
-                                <a @click="fillForm(key)">{{ key }}</a>
-                                <span v-show="howto[key]">（<a @click="showHowTo(key)">入手法</a>）</span>
-                            </td>
-                            <td>
-                                <input size="4" v-model.number="listSozai[key].formValue" @input="checkZaiko()"
-                                    class="has-text-right" />
-                            </td>
-                            <td class="has-text-right">
-                                <span v-show="listSozai[key].flag" class="checked"></span>
-                                <span v-show="!listSozai[key].flag">（{{ listSozai[key].realValue }}）</span>
-                            </td>
-                            <td class="has-text-right">
-                                <a @click="fillForm(key)">{{ listSozai[key].required }}</a>
-                            </td>
-                        </tr>
-                    </tbody>
-                    <tfoot></tfoot>
-                </table>
+                <div class="column">
+                    <!-- ダミースペース -->
+                </div>
             </div>
         </div>
     </section>
