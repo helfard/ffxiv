@@ -46,7 +46,7 @@ const panel = new Vue({
     },
     getLocalStorage: function () {
       // ローカルストレージからデータを所得
-      let panel = localStorage.getItem('panel');
+      let panel = localStorage.getItem('mtzPanel');
       if (panel) {
           this.formData = JSON.parse(panel);
       }
@@ -54,7 +54,7 @@ const panel = new Vue({
     setLocalStorage: function () {
       // ローカルストレージにデータを保存
       let panel = this.formData;
-      localStorage.setItem('panel', JSON.stringify(panel));
+      localStorage.setItem('mtzPanel', JSON.stringify(panel));
     },
   },
   mounted: function () {
@@ -184,7 +184,7 @@ const sozai = new Vue({
     },
     getLocalStorage: function () {
       // ローカルストレージからデータを所得
-      let sortKey = localStorage.getItem('listSortKey');
+      let sortKey = localStorage.getItem('mtzListSortKey');
       if (sortKey) {
           this.sortKey = JSON.parse(sortKey);
       }
@@ -192,7 +192,7 @@ const sozai = new Vue({
     setLocalStorage: function () {
       // ローカルストレージにデータを保存
       let sortKey = this.sortKey;
-      localStorage.setItem('listSortKey', JSON.stringify(sortKey));
+      localStorage.setItem('mtzListSortKey', JSON.stringify(sortKey));
     },
     copyTxt: function () {
       const S = this.firstSozai.slice()
@@ -364,11 +364,11 @@ const checker = new Vue({
     },
     getLocalStorage: function () {
       // ローカルストレージからデータを所得
-      let showMode = localStorage.getItem('checkerShowMode');
+      let showMode = localStorage.getItem('mtzCheckerShowMode');
       if (showMode) {
           this.showMode = JSON.parse(showMode);
       }
-      let jsonFormValues = localStorage.getItem('checkerFormValues');
+      let jsonFormValues = localStorage.getItem('mtzCheckerFormValues');
       if (jsonFormValues) {
         let parsedFormValues = JSON.parse(jsonFormValues);
         let formValues = {};
@@ -386,7 +386,7 @@ const checker = new Vue({
 //        }
 //        Object.keys(parsedFormValues).forEach(key => this.$set(this.listSozai[key], 'formValue', parsedFormValues[key]));
       }
-      let sortKey = localStorage.getItem('checkerSortKey');
+      let sortKey = localStorage.getItem('mtzCheckerSortKey');
       if (sortKey) {
           this.sortKey = JSON.parse(sortKey);
       }
@@ -394,7 +394,7 @@ const checker = new Vue({
     setLocalStorage: function () {
       // ローカルストレージにデータを保存
       let showMode = this.showMode;
-      localStorage.setItem('checkerShowMode', JSON.stringify(showMode));
+      localStorage.setItem('mtzCheckerShowMode', JSON.stringify(showMode));
       let listSozai = this.listSozai;
       let formValues = {}; // { key: 名前, value: 数 }
       Object.keys(this.formValues).forEach(key => {
@@ -402,9 +402,9 @@ const checker = new Vue({
           formValues[key] = this.formValues[key];
         }
       });
-      localStorage.setItem('checkerFormValues', JSON.stringify(formValues));
+      localStorage.setItem('mtzCheckerFormValues', JSON.stringify(formValues));
       let sortKey = this.sortKey;
-      localStorage.setItem('checkerSortKey', JSON.stringify(sortKey));
+      localStorage.setItem('mtzCheckerSortKey', JSON.stringify(sortKey));
     },
   },
   mounted: function () {
