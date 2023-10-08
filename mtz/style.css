@@ -46,9 +46,3 @@ body {
   animation: fadeIn 2s ease 0s 1 normal;
   -webkit-animation: fadeIn 2s ease 0s 1 normal;
 }
-
-@media screen and (max-width: 380px) {
-  header, footer {
-    width: 768px;
-  }
-}
