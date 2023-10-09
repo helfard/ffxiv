@@ -350,7 +350,6 @@ const checker = new Vue({
         }
       }
       this.listSozai = Object.assign({}, listSozai);
-      this.setLocalStorage();
     },
     clearValue: function () {
       // 所持数をリセット
@@ -410,5 +409,6 @@ const checker = new Vue({
   mounted: function () {
   },
   updated: function () {
+    this.setLocalStorage();
   },
 })
