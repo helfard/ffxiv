@@ -114,7 +114,7 @@
                                 <th class="has-text-centered">
                                     <a @click="sortKeys('name')">素材名</a>
                                 </th>
-                                <th class="has-text-centered">入手法</th>
+                                <th class="has-text-centered">メモ</th>
                                 <!-- ↓はスマホでは表示しない -->
                                 <th class="is-hidden-mobile">公式情報</th>
                                 <!-- ↑はスマホでは表示しない -->
@@ -128,7 +128,7 @@
                         <tbody class="table is-narrow is-hoverable">
                             <tr v-for="(key, i) in keysSozai" v-show="listSozai[key].required
                                 &&((showMode === 2)
-                                ||(showMode === 1 && howto[key]['メモ'])
+                                ||(showMode === 1 && howto[key].directGet)
                                 ||(showMode === 0 && sozai.firstSozai.includes(key)))
                                 ">
                                 <td>

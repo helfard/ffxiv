@@ -3,7 +3,7 @@
 const INFO = {
   // 各種情報
   name: 'Submarine Mitzmorl',
-  ver: '0.6501008',
+  ver: '0.6511203',
   title: '潜水艦ミッツモール',
   auther: 'Omochi Kinako (Chocobo)',
   url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/4384735/'
