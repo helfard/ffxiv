@@ -22,9 +22,6 @@
     text-shadow: 1px 1px 4px #000;
     font-weight: bold;
 }
-#map .pin {
-    position: absolute;
-}
 #map .nametag {
     position: absolute;
     z-index: 4;

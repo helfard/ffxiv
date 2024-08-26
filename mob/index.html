@@ -105,25 +105,20 @@
             <div v-if="areaTarget[area]" class="pinboard" :style="{ height: mapSize + 'px', width: mapSize + 'px' }">
                 <img :src="AREA[area].src" :alt="area" class="map" :style="{ height: mapSize + 'px', width: mapSize + 'px' }" />
                 <div class="areatag">{{ WORD(area)[sharedData.lang] }}</div>
-                <div v-for="(data, name) in areaTarget[area]" class="pin" :style="{
-                    top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) + '%',
-                    left: ((data.x - 0.9) / (AREA[area].w - 0.9) * 100) + '%',
-                    height: '100%',
-                    width: '100%',
-                }">
+                <template v-for="(data, name) in areaTarget[area]">
                     <div class="nametag" :style="{
-                        top: 0 + '%',
-                        left: -10 * ((data.x - 0.9) / (AREA[area].w - 0.9)) + '%',
+                        top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) + '%',
+                        left: ((data.x - 0.9) / (AREA[area].w - 0.9) * 100) - 7 * ((data.x - 0.9) / (AREA[area].w - 0.9)) - WORD(name)[sharedData.lang].length / syncRate[sharedData.lang] + '%',
                     }">
                         {{ WORD(name)[sharedData.lang] }}
                     </div>
                     <div class="circle" :style="{
-                        top: (-0.5 *  (data.r ? data.r : defaultRadius)) + '%',
-                        left: (-0.5 * (data.r ? data.r : defaultRadius)) + '%',
+                        top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) - 0.5 *  (data.r ? data.r : defaultRadius) + '%',
+                        left: ((data.x - 0.9) / (AREA[area].w - 0.9) * 100) - 0.5 * (data.r ? data.r : defaultRadius) + '%',
                         height: (data.r ? data.r : defaultRadius) + '%',
                         width: (data.r ? data.r : defaultRadius) + '%',
                     }"></div>
-                </div>
+                </template>
             </div>
         </template>
     </section>

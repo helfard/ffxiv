@@ -16,6 +16,7 @@ const map = Vue.createApp({ // 地図
             mapSize: 400, // 適用中の地図の表示サイズ（px）
             sizeOption: { '極小': 200, '小': 300, '中': 400, '大': 500, '極大': 600 }, // 地図の表示サイズ（px）
             defaultRadius: 8, // 生息範囲の直径（地図全体の幅に対する%）
+            syncRate: { 'ja': 1, 'en': 2, 'zh-TW': 1, 'zh-CH': 1, 'ko': 1, 'fr': 2, 'de': 2 }, // 名前の長さによる位置ずれ補正
             sharedData: share.data, // 共用データ
         }
     },
