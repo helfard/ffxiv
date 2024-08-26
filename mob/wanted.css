@@ -1,0 +1,63 @@
+#wanted h2 {
+    margin-bottom: 6px;
+    margin-block-start: 0px;
+    margin-block-end: 0px;
+}
+#wanted details, #wanted p {
+    margin: 6px;
+}
+#wanted .columns {
+    margin: 0px 6px;
+}
+
+/* チェックボックス */
+#wanted ul {
+    list-style-type: none;
+    margin: 0px 16px;
+}
+#wanted input[type="checkbox"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    position: relative;
+    width: 14px;
+    height: 14px;
+    vertical-align: -2px;
+    margin-right: 6px;
+    border: 1px solid #ccc;
+}
+#wanted input[type="checkbox"]:checked::before {
+    position: absolute;
+    top: -4px;
+    left: 2px;
+    transform: rotate(40deg);
+    width: 6px;
+    height: 12px;
+    border-right: 3px solid #f33;
+    border-bottom: 3px solid #f33;
+    content: '';
+}
+
+/* チェックボックス追加分（複数選択可オプションのところ） */
+#wanted .option input[type="checkbox"] {
+    margin-right: 3px;
+}
+
+/* details・summary */
+#wanted details {
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    padding: 0.5em 0.5em 0;
+}
+#wanted summary {
+    font-weight: bold;
+    margin: -0.5em -0.5em 0;
+    padding: 0.5em;
+}
+#wanted details[open] {
+    padding: 0.5em;
+}
+#wanted details[open] summary {
+    border-bottom: 1px solid #aaa;
+    margin-bottom: 0.5em;
+}

@@ -1,0 +1,43 @@
+#map .selectOption {
+    margin: 3px;
+}
+#map input[type=radio] {
+    display: none;
+}
+#map .pinboard {
+    display: inline-block;
+    position: relative;
+    z-index: 0;
+    margin: 6px;
+}
+#map .map {
+    z-index: 1;
+}
+#map .areatag {
+    position: absolute;
+    z-index: 2;
+    top: 6px;
+    left: 12px;
+    color: #fff;
+    text-shadow: 1px 1px 4px #000;
+    font-weight: bold;
+}
+#map .pin {
+    position: absolute;
+}
+#map .nametag {
+    position: absolute;
+    z-index: 4;
+    color: #00f;
+    font-weight: bold;
+    text-shadow: 0 0 3px #fff;
+    white-space: nowrap;
+}
+#map .circle {
+    position: absolute;
+    z-index: 3;
+    border-radius: 50%;
+    border: 3px dotted #00f;
+    background-color: #ccf;
+    opacity: 0.5;
+}

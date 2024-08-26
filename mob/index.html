@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="ja">
+
+<head>
+    <meta charset="UTF-8">
+    <!-- initial-scaleは0.6くらいにしておくとスマホで見やすい？ -->
+    <meta name="viewport" content="width=device-width, initial-scale=0.6">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css">
+    <!-- FF14のツールチップを使う場合はBlumaと競合するのでcommon.cssで小細工をしている -->
+    <!-- *.cssの読み込みは*.js読み込み時にする -->
+    <!-- Vue3からはローカル保存は非推奨になってしまったようだ -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <!-- FF14のツールチップを使う場合は↓を読み込む -->
+    <!--
+    <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
+    -->
+    <!-- Titleはcommon.jsで表示言語適用のついでにセットする -->
+    <script>
+        const INFO = { // 基本的な情報
+            appName: 'MobStamp', // アプリの名前（全言語共通）
+            // ページのタイトルは翻訳辞書の方で指定する
+            appVersion: '7.0520240827', // アプリのバージョン
+            storageCode: 'mob', // ローカルストレージのキーの頭に付ける符号
+            storageVersion: '1.0', // ローカルストレージのデータ形式のバージョン
+            auther: 'Omochi Kinako (Chocobo)', // 作者の名前
+            url: 'https://jp.finalfantasyxiv.com/lodestone/character/17471563/blog/5446893/', // 作者のサイト
+            jsFiles: ['word.js', 'common.js', 'data.js', 'map.js', 'wanted.js'], // 外部.jsファイル
+        }
+    </script>
+</head>
+
+<body>
+    <header class="hero is-small is-primary" id="title">
+        <div class="hero-body">
+            <h1 class="title is-2">{{ WORD('タイトル')[sharedData.lang] }}</h1>
+        </div>
+    </header>
+
+    <section class="container content field" id="language">
+        <label v-for="{lang, language} in LANGS" class="radio" :class="[lang === sharedData.lang ? 'has-text-info' : 'has-text-grey-light' , 'has-text-weight-bold']" :lang="lang">
+            <input type="radio" class="radio langRadio" v-model="sharedData.lang" :value="lang" />
+            {{ language }}
+        </label>
+    </section>
+
+    <section class="box container content field" id="wanted">
+        <h2 class="subtitle">{{ WORD('手配書')[sharedData.lang] }}</h2>
+        <div class="columns is-vcentered">
+            <div class="column is-narrow">
+                <p>{{ WORD('手配書のモンスターを選ぶ')[sharedData.lang] }}</p>
+                <ul>
+                    <li>
+                        <label class="option">
+                            <input type="checkbox" v-model="multipleSelect" />
+                            {{ WORD('複数選択可')[sharedData.lang] }}
+                        </label>
+                    </li>
+                </ul>    
+            </div>
+            <div class="column">
+                <label class="control">
+                    <button class="button is-warning has-text-weight-bold" @click="clearAll()">
+                        {{ WORD('リセット')[sharedData.lang] }}
+                    </button>
+                </label>    
+            </div>
+        </div>
+        <details v-for="(patch, p) of PATCHS" :id="'detail_' + p">
+            <summary @click="saveOpenedDetails(p)" class="has-text-weight-bold">{{ WORD(patch.fullName)[sharedData.lang] }}</summary>
+            <div v-for="level of LEVELS">
+                <div class="has-text-weight-bold">{{ WORD(level)[sharedData.lang] }}</div>
+                <ul>
+                    <li v-for="(set, s) of SET[patch.nickName][level]">
+                        <label @click="checkMultipleSelect(patch.nickName, level, s)">
+                            <input type="checkbox" v-model="checkedSet[patch.nickName][level]" :value="s" />
+                            <span class="has-text-weight-bold">{{ WORD(set[0])[sharedData.lang] }}</span>,
+                            {{ WORD(set[1])[sharedData.lang] }},
+                            ...
+                        </label>
+                    </li>
+                </ul>
+            </div>
+        </details>
+    </section>
+
+    <section class="box container content field" id="map">
+        <h2 class="subtitle">{{ WORD('地図')[sharedData.lang] }}</h2>
+        <div>
+            <label for="default" class="selectOption" :class="[mapOrder === 'default' ? 'has-text-info' : 'has-text-grey-light' , 'has-text-weight-bold']">
+                <input type="radio" class="radio" v-model="mapOrder" value="default" id="default" />
+                {{ WORD('エリア順')[sharedData.lang] }}
+            </label>
+            <label for="alt" class="selectOption" :class="[mapOrder === 'alt' ? 'has-text-info' : 'has-text-grey-light' , 'has-text-weight-bold']">
+                <input type="radio" class="radio" v-model="mapOrder" value="alt" id="alt" />
+                {{ WORD('拡張順')[sharedData.lang] }}
+            </label>
+        </div>
+        <div>
+            <label v-for="(size, key) in sizeOption" :for="'size_' + size" class="selectOption" :class="[size === mapSize ? 'has-text-info' : 'has-text-grey-light' , 'has-text-weight-bold']">
+                <input type="radio" class="radio" v-model="mapSize" :value="size" :id="'size_' + size" />
+                {{ WORD(key)[sharedData.lang] }}
+            </label>
+        </div>
+        <template v-for="area of areas">
+            <div v-if="areaTarget[area]" class="pinboard" :style="{ height: mapSize + 'px', width: mapSize + 'px' }">
+                <img :src="AREA[area].src" :alt="area" class="map" :style="{ height: mapSize + 'px', width: mapSize + 'px' }" />
+                <div class="areatag">{{ WORD(area)[sharedData.lang] }}</div>
+                <div v-for="(data, name) in areaTarget[area]" class="pin" :style="{
+                    top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) + '%',
+                    left: ((data.x - 0.9) / (AREA[area].w - 0.9) * 100) + '%',
+                    height: '100%',
+                    width: '100%',
+                }">
+                    <div class="nametag" :style="{
+                        top: 0 + '%',
+                        left: -10 * ((data.x - 0.9) / (AREA[area].w - 0.9)) + '%',
+                    }">
+                        {{ WORD(name)[sharedData.lang] }}
+                    </div>
+                    <div class="circle" :style="{
+                        top: (-0.5 *  (data.r ? data.r : defaultRadius)) + '%',
+                        left: (-0.5 * (data.r ? data.r : defaultRadius)) + '%',
+                        height: (data.r ? data.r : defaultRadius) + '%',
+                        width: (data.r ? data.r : defaultRadius) + '%',
+                    }"></div>
+                </div>
+            </div>
+        </template>
+    </section>
+
+    <footer class="footer">
+        <address v-once class="content has-text-centered" id="address">
+            <strong>{{ INFO.appName }}</strong>
+            Ver.{{ INFO.appVersion }}
+            by <a :href="INFO.url">{{ INFO.auther }}</a>
+        </address>
+    </footer>
+
+    <script>
+        INFO.jsFiles.forEach(script => { // 外部JSファイル（とCSS）の読み込み
+            // 直接<script>を書き込む力技でないとロード順が保証されない
+            // appendChild()を使うとどう頑張ってもブラウザキャッシュが絡んだ時に実行順が狂ってしまう
+            // でもバージョンアップ時に古いブラウザキャッシュの影響を受けないようにするためだから仕方ないね
+            document.write('<script src="' + script + '?' + INFO.appVersion + '"><\/script>');
+        });
+    </script>
+
+</body>
+
+</html>
