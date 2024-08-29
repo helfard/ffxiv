@@ -52,7 +52,7 @@ const map = Vue.createApp({ // 地図
             let checkedSet = this.checkedSet;
             let areaTarget = {};
             for (let patch of PATCHS) {
-                for (let level of LEVELS) {
+                for (let level of LEVELS[patch.nickName]) {
                     for (let index of checkedSet[patch.nickName][level]) {
                         for (let targetName of SET[patch.nickName][level][index]) {
                             let targetData = MONSTER[patch.nickName][targetName];
@@ -82,7 +82,7 @@ const map = Vue.createApp({ // 地図
         initializeCheckedSet () {
             // 選択された手配書の初期化
             return PATCHS.reduce((patchSet, patch) => {
-                patchSet[patch.nickName] = LEVELS.reduce((levelSet, level) => {
+                patchSet[patch.nickName] = LEVELS[patch.nickName].reduce((levelSet, level) => {
                     levelSet[level] = [];
                     return levelSet;
                 }, {});

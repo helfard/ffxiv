@@ -19,7 +19,7 @@
         const INFO = { // 基本的な情報
             appName: 'MobStamp', // アプリの名前（全言語共通）
             // ページのタイトルは翻訳辞書の方で指定する
-            appVersion: '7.0520240827', // アプリのバージョン
+            appVersion: '7.0520240830', // アプリのバージョン
             storageCode: 'mob', // ローカルストレージのキーの頭に付ける符号
             storageVersion: '1.0', // ローカルストレージのデータ形式のバージョン
             auther: 'Omochi Kinako (Chocobo)', // 作者の名前
@@ -67,8 +67,8 @@
         </div>
         <details v-for="(patch, p) of PATCHS" :id="'detail_' + p">
             <summary @click="saveOpenedDetails(p)" class="has-text-weight-bold">{{ WORD(patch.fullName)[sharedData.lang] }}</summary>
-            <div v-for="level of LEVELS">
-                <div class="has-text-weight-bold">{{ WORD(level)[sharedData.lang] }}</div>
+            <div v-for="level of LEVELS[patch.nickName]">
+                <div class="has-text-weight-bold">{{ WORD(patch.nickName + ' ' + level)[sharedData.lang] }}</div>
                 <ul>
                     <li v-for="(set, s) of SET[patch.nickName][level]">
                         <label @click="checkMultipleSelect(patch.nickName, level, s)">
@@ -108,7 +108,10 @@
                 <template v-for="(data, name) in areaTarget[area]">
                     <div class="nametag" :style="{
                         top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) + '%',
-                        left: ((data.x - 0.9) / (AREA[area].w - 0.9) * 100) - 7 * ((data.x - 0.9) / (AREA[area].w - 0.9)) - WORD(name)[sharedData.lang].length / syncRate[sharedData.lang] + '%',
+                        left:
+                            ((data.x - 0.9) / (AREA[area].w - 0.9) * 80)
+                            + mapSize / 50
+                            - WORD(name)[sharedData.lang].length / syncRate[sharedData.lang] + '%',
                     }">
                         {{ WORD(name)[sharedData.lang] }}
                     </div>
