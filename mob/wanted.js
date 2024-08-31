@@ -37,12 +37,19 @@ const wanted = Vue.createApp({ // 手配書
             // ローカルストレージに複数選択可フラグを保存
             this.saveStorage('MultipleSelect', multipleSelect);
         },
+        sharedData: {
+            handler (sharedData) {
+                // 韓国語版はまだ黄金が配信されていないので黄金のデータは排除
+                if (sharedData.lang === 'ko') this.checkedSet['黄金'] = { '初級': [], '中級': [], '上級': [] };
+            },
+            deep: true
+        }
     },
     methods: {
         initializeCheckedSet () {
             // 選択された手配書の初期化
             return PATCHS.reduce((patchSet, patch) => {
-                patchSet[patch.nickName] = LEVELS.reduce((levelSet, level) => {
+                patchSet[patch.nickName] = LEVELS[patch.nickName].reduce((levelSet, level) => {
                     levelSet[level] = [];
                     return levelSet;
                 }, {});
@@ -66,7 +73,7 @@ const wanted = Vue.createApp({ // 手配書
             const PATCHS = this.PATCHS;
             const LEVELS = this.LEVELS;
             for (let patch of PATCHS) {
-                for (let level of LEVELS) {
+                for (let level of LEVELS[patch.nickName]) {
                     this.checkedSet[patch.nickName][level].splice(0);
                 }
             }
@@ -75,7 +82,6 @@ const wanted = Vue.createApp({ // 手配書
             // 地図にデータを送る
             log('WANTED: MAP にデータを送信');
             map.setCheckedSet(this.checkedSet);
-
         },
         saveOpenedDetails (index) {
             // 手配書の展開状況をローカルストレージに保存
@@ -83,7 +89,12 @@ const wanted = Vue.createApp({ // 手配書
             const PATCHS = this.PATCHS;
             let openedDetails = Array(PATCHS.length).fill(false); // 手配書の展開状況
             openedDetails.forEach((_, i) => {
-                openedDetails[i] = document.getElementById('detail_' + i).getAttribute('open') !== null; // open属性があればtrueに
+                let element = document.getElementById('detail_' + i);
+                if (element) {
+                    openedDetails[i] = element.getAttribute('open') !== null; // open属性があればtrueに
+                } else {
+                    openedDetails[i] = false;
+                }
             });
             // クリックによるopen属性の操作よりもここの処理のタイミングが先なため、クリックした手配書だけフラグを反転させる
             openedDetails[index] = !openedDetails[index];
@@ -103,7 +114,7 @@ const wanted = Vue.createApp({ // 手配書
     mounted () {
         // ローカルストレージから選択済みデータを所得
         let checkedSet = this.loadStorage('Set');
-        if (checkedSet) this.checkedSet = checkedSet;
+        if (checkedSet) this.checkedSet = { ...this.checkedSet, ...checkedSet };
         // ローカルストレージから複数選択可フラグを所得
         let multipleSelect = this.loadStorage('MultipleSelect');
         if (multipleSelect) this.multipleSelect = multipleSelect;
@@ -111,7 +122,9 @@ const wanted = Vue.createApp({ // 手配書
         let openedDetails = this.loadStorage('OpenedDetails');
         if (openedDetails) {
             openedDetails.forEach((value, index) => {
-                document.getElementById('detail_' + index).toggleAttribute('open', value);
+                let element = document.getElementById('detail_' + index);
+                // アップデートで拡張が減ると該当のIDが存在しない場合があるのでifで…
+                if (element) element.toggleAttribute('open', value);
             });
         }
         // 手配書の展開状況を変数として持っておく必要はない
