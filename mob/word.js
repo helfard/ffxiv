@@ -38,7 +38,7 @@ const DICT = { // 翻訳辞書
         'en': 'Mob Stamp',
         'zh-TW': '',
         'zh-CH': '',
-        'ko': '',
+        'ko': '척척사냥꾼 (가명)',
         'fr': '',
         'de': '',
     },

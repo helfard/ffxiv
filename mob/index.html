@@ -9,7 +9,7 @@
     <!-- FF14のツールチップを使う場合はBlumaと競合するのでcommon.cssで小細工をしている -->
     <!-- *.cssの読み込みは*.js読み込み時にする -->
     <!-- Vue3からはローカル保存は非推奨になってしまったようだ -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.3.4/vue.global.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/3.4.38/vue.global.prod.min.js"></script>
     <!-- FF14のツールチップを使う場合は↓を読み込む -->
     <!--
     <script src="https://img.finalfantasyxiv.com/lds/pc/global/js/eorzeadb/loader.js?v2"></script>
@@ -19,7 +19,7 @@
         const INFO = { // 基本的な情報
             appName: 'MobStamp', // アプリの名前（全言語共通）
             // ページのタイトルは翻訳辞書の方で指定する
-            appVersion: '7.0520240831', // アプリのバージョン
+            appVersion: '7.0520240901', // アプリのバージョン
             storageCode: 'mob', // ローカルストレージのキーの頭に付ける符号
             storageVersion: '1.0', // ローカルストレージのデータ形式のバージョン
             auther: 'Omochi Kinako (Chocobo)', // 作者の名前
@@ -112,8 +112,8 @@
                     <div class="nametag" :style="{
                         top: ((data.y - 0.9) / (AREA[area].h - 0.9) * 100) + '%',
                         left:
-                            ((data.x - 0.9) / (AREA[area].w - 0.9) * 80)
-                            + mapSize / 50
+                            ((data.x - 0.9) / (AREA[area].w - 0.9) * 90)
+                            + mapSize / 100
                             - WORD(name)[sharedData.lang].length / syncRate[sharedData.lang] + '%',
                     }">
                         {{ WORD(name)[sharedData.lang] }}
