@@ -42,10 +42,8 @@ const counter = new Vue({
         },
         saveParts: function () {
             // ローカルストレージにパーツデータを保存
-            if (window.confirm(WORDS['confirm override'][this.sharedState.lang])) {
-                localStorage.setItem('partsBox', JSON.stringify(this.partsBox));
-                localStorage.setItem('rank', this.rank);
-            }
+            localStorage.setItem('partsBox', JSON.stringify(this.partsBox));
+            localStorage.setItem('rank', this.rank);
         },
         loadParts: function () {
             // ローカルストレージからデータを所得
@@ -56,6 +54,7 @@ const counter = new Vue({
         },
         stackOrder: function () {
             // データの二重送信を防ぐために遅延をかける
+            this.saveParts();
             this.sendFlag = true;
             setTimeout(this.sendOrder, 200);
         },
