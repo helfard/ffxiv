@@ -66,9 +66,9 @@
             </div>
         </div>
         <template v-for="(patch, p) of PATCHS">
-            <!-- <details :id="'detail_' + p" v-if="sharedData.lang !== 'ko' || p !== 0"> -->
-            <!-- 韓国語版の配信が遅れたら↑ここ↓を入れ替える -->
             <details :id="'detail_' + p">
+            <!-- 韓国語版の配信が遅れたら↑ここ↓を入れ替える -->
+            <!-- details :id="'detail_' + p" v-if="sharedData.lang !== 'ko' || p !== 0" -->
             <summary @click="saveOpenedDetails(p)" class="has-text-weight-bold">{{ WORD(patch.fullName)[sharedData.lang] }}</summary>
                 <div v-for="level of LEVELS[patch.nickName]">
                     <div class="has-text-weight-bold">{{ WORD(patch.nickName + ' ' + level)[sharedData.lang] }}</div>
