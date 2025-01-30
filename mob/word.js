@@ -2237,7 +2237,7 @@ const DICT = { // 翻訳辞書
         'en': 'Jungle Iguana',
         'zh-TW': '',
         'zh-CH': '',
-        'ko': '작은 아폴리온',
+        'ko': '밀림 이구아나',
         'fr': '',
         'de': '',
     },
