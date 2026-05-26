@@ -6,7 +6,7 @@ const dock = new Vue({
         rank: 50,
         filters: [...PARA_S].fill(null), // フィルタ設定
         docks: [], // ドック入りリスト
-        maxShips: 200, // 最大表示件数
+        maxShips: 300, // 最大表示件数
         forceShowFlag: false, // 最大表示件数を越えて強制的に表示するフラグ
         markedShips: [], // コピペ用チェックリスト
         sortKey: 0, // 現在のソート設定
