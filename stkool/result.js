@@ -5,7 +5,7 @@ const result = new Vue({
         parts: [], // 手持ちパーツのリスト
         rank: 50,
         filters: [...PARA_S].fill(null), // フィルタ設定
-        maxShips: 200, // 最大表示件数
+        maxShips: 625, // 最大表示件数
         forceShowFlag: false, // 最大表示件数を越えて強制的に表示するフラグ
         markedShips: [], // コピペ用チェックリスト
         copyFlag: false,

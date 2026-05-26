@@ -40,6 +40,15 @@ const counter = new Vue({
         clearAll: function () {
             this.partsBox = [...this.partsBox].fill(0);
         },
+        rankDown: function () {
+            let rank = this.rank - 0;
+            let rankMin = this.rankMin - 0;
+            if (rank > rankMin) this.rank = rank - 1 + '';
+        },
+        rankUp: function () {
+            let rank = this.rank - 0;
+            let rankMax = this.rankMax - 0;
+            if (rank < rankMax) this.rank = rank + 1 + '';},
         saveParts: function () {
             // ローカルストレージにパーツデータを保存
             localStorage.setItem('partsBox', JSON.stringify(this.partsBox));

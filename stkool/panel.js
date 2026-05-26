@@ -35,6 +35,15 @@ const panel = new Vue({
                 ? this.checkedButtons.concat(ary).sort((a, b) => a - b)
                 : this.checkedButtons.filter(i => !orders.includes(i));
         },
+        rankDown: function () {
+            let rank = this.rank - 0;
+            let rankMin = this.rankMin - 0;
+            if (rank > rankMin) this.rank = rank - 1 + '';
+        },
+        rankUp: function () {
+            let rank = this.rank - 0;
+            let rankMax = this.rankMax - 0;
+            if (rank < rankMax) this.rank = rank + 1 + '';},
         stackOrder: function () {
             // データの二重送信を防ぐために遅延をかける
             this.sendFlag = true;

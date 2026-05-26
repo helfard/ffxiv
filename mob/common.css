@@ -13,6 +13,7 @@
 body {
   animation: fadeIn 2s ease 0s 1 normal;
   -webkit-animation: fadeIn 2s ease 0s 1 normal;
+  user-select: none;
 }
 
 @media screen and (max-width: 480px) {
